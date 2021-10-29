@@ -1,31 +1,30 @@
-import figurines.*;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Board implements GameModell, Serializable {
     Cell[][] board;
-    Cell[] elephantSupply;
-    Cell[] rhinoSupply;
+    ArrayList<Elephant> elephantSupply;
+    ArrayList<Rhino> rhinoSupply;
 
     public Board() {
         board = new Cell[5][5];
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 if (y == 2 && x > 0 && x < 4) {
-                    board[y][x] = new Stone();
+                    board[y][x] = new Stone(new Position(x, y));
                 } else {
-                    board[y][x] = new Cell();
+                    board[y][x] = new Cell(new Position(x, y));
                 }
             }
         }
 
-        elephantSupply = new Cell[5];
+        elephantSupply = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            elephantSupply[i] = new Elephant();
+            elephantSupply.add(new Elephant(new Position(-1, -1)));
         }
-        rhinoSupply = new Cell[5];
+        rhinoSupply = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            rhinoSupply[i] = new Rhino();
+            rhinoSupply.add(new Rhino(new Position(-1, -1)));
         }
     }
 
@@ -64,5 +63,21 @@ public class Board implements GameModell, Serializable {
 
     public Cell getCell(int x, int y) {
         return board[y][x];
+    }
+
+    public Cell getSupplyCell(Player p, int idx) {
+        switch (p) {
+            case RHINO: return rhinoSupply.get(idx);
+            case ELEPHANT: return elephantSupply.get(idx);
+            default: return null;
+        }
+    }
+
+    public int getSupplySize(Player p) {
+        switch (p) {
+            case ELEPHANT: return elephantSupply.size();
+            case RHINO: return rhinoSupply.size();
+            default: return 0;
+        }
     }
 }

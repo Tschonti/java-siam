@@ -1,6 +1,5 @@
 public enum GameState {
     NOT_STARTED,
-    ELEPHANT_MOVES,
-    RHINO_MOVES,
+    STARTED,
     GAME_OVER
 }

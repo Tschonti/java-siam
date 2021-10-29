@@ -1,6 +1,3 @@
-import figurines.Cell;
-import figurines.Direction;
-
 public interface GameModell {
     void moveOnBoard(Position src, Direction d);
     void moveToBench(Position source);
