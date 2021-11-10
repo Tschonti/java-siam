@@ -22,7 +22,7 @@ public class Rhino extends Animal {
     class RhinoClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            controller.clickedOnRhino(pos);
+            controller.clickedOnAnimal(pos, Player.RHINO);
         }
     }
 }

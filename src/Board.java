@@ -2,9 +2,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Board implements GameModell, Serializable {
-    Cell[][] board;
-    ArrayList<Elephant> elephantSupply;
-    ArrayList<Rhino> rhinoSupply;
+    private Cell[][] board;
+    private ArrayList<Elephant> elephantSupply;
+    private ArrayList<Rhino> rhinoSupply;
+    private GUI g;
 
     public Board() {
         board = new Cell[5][5];
@@ -28,22 +29,33 @@ public class Board implements GameModell, Serializable {
         }
     }
 
+    public void setGUI(GUI gui) { g = gui; }
+
 
     @Override
     public void moveOnBoard(Position src, Direction d) {
         Cell temp = board[src.getY() + d.y][src.getX() + d.x];
         board[src.getY() + d.y][src.getX() + d.x] = board[src.getY()][src.getX()];
         board[src.getY()][src.getX()] = temp;
+
+        board[src.getY()][src.getX()].setPos(new Position(src.getX(), src.getY()));
+        board[src.getY() + d.y][src.getX() + d.x].setPos(new Position(src.getX() + d.x, src.getY() + d.y));
+
+        g.drawBoard();
     }
 
     @Override
-    public void moveToBench(Position source) {
+    public void moveToBench(Position source, Player bench) {
 
     }
 
     @Override
-    public void moveFromBench(Position dest) {
-
+    public void moveFromBench(Position dest, Player bench) {
+        Animal toMove = bench == Player.ELEPHANT ? elephantSupply.remove(0) : rhinoSupply.remove(0);
+        board[dest.getY()][dest.getX()] = toMove;
+        toMove.setPos(dest);
+        g.drawBoard();
+        g.drawSupply(bench);
     }
 
     @Override

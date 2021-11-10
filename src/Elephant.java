@@ -22,7 +22,7 @@ public class Elephant extends Animal {
     class ElephantClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            controller.clickedOnElephant(pos);
+            controller.clickedOnAnimal(pos, Player.ELEPHANT);
         }
     }
 }

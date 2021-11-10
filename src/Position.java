@@ -22,4 +22,28 @@ public class Position {
     public void setY(int y) {
         this.y = y;
     }
+
+    public boolean equals(Position p) {
+        return x == p.x && y == p.y;
+    }
+
+    public static Direction whichWayToStep(Position src, Position dest) {
+        int dx = dest.x - src.x;
+        int dy = dest.y - src.y;
+        if (dx != 0 && dy != 0 || dx == 0 && dy == 0) {
+            return null;
+        }
+        if ( dx == 0) {
+            if ( dy == 1) {
+                return Direction.DOWN;
+            }
+            return Direction.UP;
+        } else {
+            if ( dx == 1 ) {
+                return Direction.RIGHT;
+            }
+            return Direction.LEFT;
+        }
+
+    }
 }

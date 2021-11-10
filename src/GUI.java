@@ -10,10 +10,10 @@ public class GUI extends JFrame {
 
     public GUI(Board b) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1280, 1024);
         setLayout( new BorderLayout());
 
-        JPanel left = new JPanel();
+        JPanel left = new JPanel(new BorderLayout());
         right = new JPanel();
         add(left, BorderLayout.WEST);
         add(right, BorderLayout.EAST);
@@ -47,11 +47,19 @@ public class GUI extends JFrame {
     }
 
     public void drawSupply(Player p) {
-        for (int i = 0; i < board.getSupplySize(p); i++) {
-            switch (p) {
-                case RHINO: rhinoSupplyCont.add(board.getSupplyCell(p, i).getGUI()); break;
-                case ELEPHANT: elephantSupplyCont.add(board.getSupplyCell(p, i).getGUI()); break;
-            }
+        switch (p) {
+            case RHINO:
+                rhinoSupplyCont.removeAll();
+                for (int i = 0; i < board.getSupplySize(p); i++) {
+                    rhinoSupplyCont.add(board.getSupplyCell(p, i).getGUI());
+                }
+                break;
+            case ELEPHANT:
+                elephantSupplyCont.removeAll();
+                for (int i = 0; i < board.getSupplySize(p); i++) {
+                    elephantSupplyCont.add(board.getSupplyCell(p, i).getGUI());
+                }
+                break;
         }
     }
 }
