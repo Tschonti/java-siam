@@ -16,6 +16,7 @@ public class Rhino extends Animal {
         } else {
             p.setBackground(new Color(208, 63, 63));
         }
+        p.setPreferredSize(new Dimension(120, 120));
         return p;
     }
 

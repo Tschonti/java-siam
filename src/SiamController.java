@@ -21,6 +21,12 @@ public class SiamController {
             if (round_s == RoundState.PICK_FIGURINE && onTurn == pl) {
                 selectedPos = p;
                 round_s = RoundState.PICK_DESTINATION;
+            } else if (round_s == RoundState.PICK_DESTINATION && onTurn == pl) {
+                if (p.equals(Position.bench()) && !selectedPos.equals(Position.bench())) {
+                    board.moveToBench(selectedPos, onTurn);
+                    round_s = RoundState.PICK_FIGURINE;
+                    onTurn = Player.swap(onTurn);
+                }
             }
         }
         System.out.println((pl == Player.ELEPHANT ? "Elefánt" : "Orrszarvú") + " x: " + p.getX() + ", y: " + p.getY());
@@ -29,12 +35,15 @@ public class SiamController {
     public void clickedOnCell(Position p) {
         if (game_s == GameState.STARTED) {
             if (round_s == RoundState.PICK_DESTINATION) {
-                if (selectedPos.equals(new Position(-1, -1))) {
-                    board.moveFromBench(p, onTurn);
+                Position bench = new Position(-1, -1);
+                if (selectedPos.equals(bench)) {
+                    if (!board.moveFromBench(p, onTurn)) {
+                        return;
+                    }
                 } else {
                     Direction d = Position.whichWayToStep(selectedPos, p);
                     if (d == null) {
-                        System.out.println("ajjaj");
+                        return;
                     } else {
                         board.moveOnBoard(selectedPos, d);
                     }

@@ -30,7 +30,7 @@ public class Position {
     public static Direction whichWayToStep(Position src, Position dest) {
         int dx = dest.x - src.x;
         int dy = dest.y - src.y;
-        if (dx != 0 && dy != 0 || dx == 0 && dy == 0) {
+        if ((dx != 0 && dy != 0) || (dx == 0 && dy == 0) || dx > 1 || dy > 1 || dx < -1 || dy < -1) {
             return null;
         }
         if ( dx == 0) {
@@ -45,5 +45,8 @@ public class Position {
             return Direction.LEFT;
         }
 
+    }
+    public static Position bench() {
+        return new Position(-1, -1);
     }
 }

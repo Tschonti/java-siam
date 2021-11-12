@@ -36,6 +36,7 @@ public class Cell {
         } else {
             p.setBackground(new Color(157, 157, 157));
         }
+        p.setPreferredSize(new Dimension(120, 120));
         return p;
     }
 

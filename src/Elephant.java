@@ -16,6 +16,7 @@ public class Elephant extends Animal {
         } else {
             p.setBackground(new Color(62, 183, 68));
         }
+        p.setPreferredSize(new Dimension(120, 120));
         return p;
     }
 
