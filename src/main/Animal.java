@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.*;
 
 public abstract class Animal extends Cell {

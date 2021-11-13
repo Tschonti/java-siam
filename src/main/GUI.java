@@ -1,5 +1,12 @@
+package main;
+
+import panels.PickDestinationPanel;
+import panels.PickFigurinePanel;
+import panels.PlayerOnTurnPanel;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class GUI extends JFrame {
     private JPanel boardCont;
@@ -7,16 +14,17 @@ public class GUI extends JFrame {
     private JPanel rhinoSupplyCont;
     private JPanel right;
     private Board board;
+    private PlayerOnTurnPanel potp;
+    static private HashMap<RoundState, String> stateToPanel;
 
-    public GUI(Board b) {
+    public GUI(Board b, SiamController c) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1280, 1024);
         setLayout( new BorderLayout());
 
+        // left side
         JPanel left = new JPanel(new BorderLayout());
-        right = new JPanel();
         add(left, BorderLayout.WEST);
-        add(right, BorderLayout.EAST);
 
         boardCont = new JPanel();
         elephantSupplyCont = new JPanel();
@@ -31,6 +39,26 @@ public class GUI extends JFrame {
         left.add(rhinoSupplyCont, BorderLayout.NORTH);
         left.add(boardCont, BorderLayout.CENTER);
         left.add(elephantSupplyCont, BorderLayout.SOUTH);
+
+        //right side
+        CardLayout cl = new CardLayout();
+        right = new JPanel(cl);
+        add(right, BorderLayout.EAST);
+
+        potp = new PlayerOnTurnPanel();
+        PickDestinationPanel pdp = new PickDestinationPanel(potp);
+        PickFigurinePanel pfp = new PickFigurinePanel(potp);
+
+        right.add(pfp, pfp.getName());
+        right.add(pdp, pdp.getName());
+
+        cl.show(right, pfp.getName());
+
+        stateToPanel = new HashMap<>();
+        stateToPanel.put(RoundState.PICK_DESTINATION, pdp.getName());
+        stateToPanel.put(RoundState.PICK_FIGURINE, pfp.getName());
+        right.setPreferredSize(new Dimension(640, 640));
+
 
         board = b;
         drawBoard();
@@ -66,4 +94,13 @@ public class GUI extends JFrame {
                 break;
         }
     }
+
+    public void stateSwitch(GameState gs, RoundState rs, Player onTurn) {
+        if (gs == GameState.STARTED) {
+            CardLayout cl = (CardLayout) right.getLayout();
+            cl.show(right, stateToPanel.get(rs));
+            potp.switchPlayer(onTurn);
+        }
+    }
+
 }

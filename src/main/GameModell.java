@@ -1,3 +1,5 @@
+package main;
+
 public interface GameModell {
     void moveOnBoard(Position src, Direction d);
     void moveToBench(Position source, Player bench);

@@ -1,3 +1,5 @@
+package main;
+
 public class SiamController {
     private GameState game_s;
     private RoundState round_s;
@@ -12,8 +14,12 @@ public class SiamController {
         onTurn = Player.ELEPHANT;
         board = new Board();
         Cell.setController(this);
-        g = new GUI(board);
+        g = new GUI(board, this);
         board.setGUI(g);
+    }
+
+    public Player getOnTurn() {
+        return onTurn;
     }
 
     public void clickedOnAnimal(Position p, Player pl) {
@@ -21,11 +27,13 @@ public class SiamController {
             if (round_s == RoundState.PICK_FIGURINE && onTurn == pl) {
                 selectedPos = p;
                 round_s = RoundState.PICK_DESTINATION;
+                g.stateSwitch(game_s, round_s, onTurn);
             } else if (round_s == RoundState.PICK_DESTINATION && onTurn == pl) {
                 if (p.equals(Position.bench()) && !selectedPos.equals(Position.bench())) {
                     board.moveToBench(selectedPos, onTurn);
                     round_s = RoundState.PICK_FIGURINE;
                     onTurn = Player.swap(onTurn);
+                    g.stateSwitch(game_s, round_s, onTurn);
                 }
             }
         }
@@ -50,6 +58,7 @@ public class SiamController {
                 }
                 round_s = RoundState.PICK_FIGURINE;
                 onTurn = Player.swap(onTurn);
+                g.stateSwitch(game_s, round_s, onTurn);
             }
         }
         System.out.println("cell x: " + p.getX() + ", y: " + p.getY());

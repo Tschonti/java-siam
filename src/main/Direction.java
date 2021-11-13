@@ -1,3 +1,5 @@
+package main;
+
 public enum Direction {
     UP (0, -1),
     RIGHT (1, 0),
