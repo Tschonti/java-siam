@@ -11,7 +11,9 @@ public class PlayerOnTurnPanel extends JPanel {
 
     public PlayerOnTurnPanel() {
         label = new JLabel(elephantTurn);
+        add(label);
         setPreferredSize(new Dimension(100, 20));
+        setBackground(new Color(222, 234, 9));
     }
 
     public void switchPlayer(Player p) {

@@ -1,4 +1,8 @@
-package main;
+package cells;
+
+import main.Direction;
+import main.Player;
+import main.Position;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,20 +10,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Elephant extends Animal {
+
+
     public Elephant(Position p) {
         super(p, Direction.UP);
+        addMouseListener(new ElephantClickListener());
+        setBackground(new Color(62, 183, 68));
+        dirLabel = new JLabel("^");
+        add(dirLabel);
     }
 
-    public JPanel getGUI() {
-        JPanel p = new JPanel();
-        p.addMouseListener(new ElephantClickListener());
-        if (focused) {
-            p.setBackground(new Color(35, 117, 14));
+    public void setHighlighted(boolean f) {
+        if (f) {
+            setBackground(new Color(35, 117, 14));
         } else {
-            p.setBackground(new Color(62, 183, 68));
+            setBackground(new Color(62, 183, 68));
         }
-        p.setPreferredSize(new Dimension(120, 120));
-        return p;
     }
 
     class ElephantClickListener extends MouseAdapter {

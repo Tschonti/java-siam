@@ -1,18 +1,40 @@
-package main;
+package cells;
+
+import main.Direction;
+import main.Position;
+import main.SiamController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Cell {
-    protected boolean focused;
+public class Cell extends JPanel {
     protected Position pos;
+    protected Direction dir;
     static protected SiamController controller;
 
     public Cell(Position p) {
-        focused = false;
         pos = p;
+        addMouseListener(new CellClickListener());
+        setBackground(new Color(157, 157, 157));
+        setPreferredSize(new Dimension(120, 120));
+    }
+
+    public void setHighlighted(boolean f) {
+        if (f) {
+            setBackground(new Color(128, 145, 180));
+        } else {
+            setBackground(new Color(157, 157, 157));
+        }
+    }
+
+    public void setDir(Direction dir) {
+        this.dir = dir;
+    }
+
+    public Direction getDir() {
+        return dir;
     }
 
     public Position getPos() {
@@ -25,21 +47,6 @@ public class Cell {
 
     static public void setController(SiamController c) {
         controller = c;
-    }
-    public void setFocused(boolean f) {
-        focused = f;
-    }
-
-    public JPanel getGUI() {
-        JPanel p = new JPanel();
-        p.addMouseListener(new CellClickListener());
-        if (focused) {
-            p.setBackground(new Color(128, 145, 180));
-        } else {
-            p.setBackground(new Color(157, 157, 157));
-        }
-        p.setPreferredSize(new Dimension(120, 120));
-        return p;
     }
 
     public int getStrengthForPush(Direction d) {

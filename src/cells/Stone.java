@@ -1,4 +1,7 @@
-package main;
+package cells;
+
+import main.Direction;
+import main.Position;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,12 +9,7 @@ import java.awt.*;
 public class Stone extends Cell {
     public Stone(Position p) {
         super(p);
-    }
-
-    public JPanel getGUI() {
-        JPanel p = new JPanel();
-        p.setBackground(new Color(105, 105, 105));
-        return p;
+        setBackground(new Color(105, 105, 105));
     }
 
     public int getStrengthForPush(Direction d) {

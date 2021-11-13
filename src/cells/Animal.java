@@ -1,24 +1,27 @@
-package main;
+package cells;
+
+import main.Direction;
+import main.Position;
 
 import javax.swing.*;
 
 public abstract class Animal extends Cell {
-    private Direction dir;
+    protected JLabel dirLabel;
 
     public Animal(Position p, Direction d) {
         super(p);
         dir = d;
     }
 
-    public void setDir(Direction dir) {
-        this.dir = dir;
+    public void setDir(Direction d) {
+        dir = d;
+        switch (d) {
+            case UP: dirLabel.setText("^"); break;
+            case RIGHT: dirLabel.setText(">"); break;
+            case LEFT: dirLabel.setText("<"); break;
+            case DOWN: dirLabel.setText("ˇ");
+        }
     }
-
-    public Direction getDir() {
-        return dir;
-    }
-
-    public abstract JPanel getGUI();
 
     public int getStrengthForPush(Direction d) {
         if (d.equals(dir)) {

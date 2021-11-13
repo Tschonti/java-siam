@@ -1,5 +1,7 @@
 package main;
 
+import cells.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -35,13 +37,15 @@ public class Board implements GameModell, Serializable {
 
 
     @Override
-    public void moveOnBoard(Position src, Direction d) {
-        Cell temp = board[src.getY() + d.y][src.getX() + d.x];
-        board[src.getY() + d.y][src.getX() + d.x] = board[src.getY()][src.getX()];
+    public void moveOnBoard(Position src, Direction moveDir, Direction facingDir) {
+        Position dest = new Position(src.getX() + moveDir.x, src.getY() + moveDir.y);
+        Cell temp = board[dest.getY()][dest.getX()];
+        board[dest.getY()][dest.getX()] = board[src.getY()][src.getX()];
         board[src.getY()][src.getX()] = temp;
 
         board[src.getY()][src.getX()].setPos(new Position(src.getX(), src.getY()));
-        board[src.getY() + d.y][src.getX() + d.x].setPos(new Position(src.getX() + d.x, src.getY() + d.y));
+        board[dest.getY()][dest.getX()].setPos(new Position(dest.getX(), dest.getY()));
+        board[dest.getY()][dest.getX()].setDir(facingDir);
 
         g.drawBoard();
     }
@@ -51,8 +55,13 @@ public class Board implements GameModell, Serializable {
         System.out.println("sfds");
         board[source.getY()][source.getX()].setPos(new Position(-1, -1));
         switch (bench) {
-            case RHINO: rhinoSupply.add((Rhino) board[source.getY()][source.getX()]); break;
-            case ELEPHANT: elephantSupply.add((Elephant) board[source.getY()][source.getX()]);
+            case RHINO:
+                rhinoSupply.add((Rhino) board[source.getY()][source.getX()]);
+                board[source.getY()][source.getX()].setDir(Direction.DOWN);
+                break;
+            case ELEPHANT:
+                elephantSupply.add((Elephant) board[source.getY()][source.getX()]);
+                board[source.getY()][source.getX()].setDir(Direction.UP);
         }
         board[source.getY()][source.getX()] = new Cell(new Position(source.getX(), source.getY()));
         g.drawBoard();
@@ -60,13 +69,14 @@ public class Board implements GameModell, Serializable {
     }
 
     @Override
-    public boolean moveFromBench(Position dest, Player bench) {
+    public boolean moveFromBench(Position dest, Player bench, Direction newDir) {
         if (!isInOuterCells(dest)) {
             return false;
         }
         Animal toMove = bench == Player.ELEPHANT ? elephantSupply.remove(0) : rhinoSupply.remove(0);
         board[dest.getY()][dest.getX()] = toMove;
         toMove.setPos(dest);
+        toMove.setDir(newDir);
         g.drawBoard();
         g.drawSupply(bench);
         return true;
@@ -107,7 +117,7 @@ public class Board implements GameModell, Serializable {
         }
     }
 
-    private boolean isInOuterCells(Position p) {
+    public static boolean isInOuterCells(Position p) {
         if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
             return true;
         } else return (p.getX() == 0 || p.getX() == 4) && p.getY() >= 0 && p.getY() <= 4;

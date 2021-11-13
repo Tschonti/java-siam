@@ -1,14 +1,14 @@
 package panels;
 
-import main.Player;
 import javax.swing.*;
+import java.awt.*;
 
 public class PickFigurinePanel extends JPanel {
-    private final String name = "pickFigurine";
-
-    public PickFigurinePanel(PlayerOnTurnPanel potp) {
+    public PickFigurinePanel() {
+        setName("pickFigurine");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(potp);
         add(new JLabel("Pick the animals you want to perform an action with!"));
+        setBackground(new Color(16, 224, 162));
+
     }
 }
