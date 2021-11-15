@@ -20,7 +20,9 @@ public class Elephant extends Animal {
         add(dirLabel);
     }
 
-    public void setHighlighted(boolean f) {
+    public void setHighlightedForMove(boolean f) {}
+
+    public void setHighlightedCenter(boolean f) {
         if (f) {
             setBackground(new Color(35, 117, 14));
         } else {

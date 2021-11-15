@@ -21,13 +21,15 @@ public class Cell extends JPanel {
         setPreferredSize(new Dimension(120, 120));
     }
 
-    public void setHighlighted(boolean f) {
+    public void setHighlightedForMove(boolean f) {
         if (f) {
             setBackground(new Color(128, 145, 180));
         } else {
             setBackground(new Color(157, 157, 157));
         }
     }
+
+    public void setHighlightedCenter(boolean f) {}
 
     public void setDir(Direction dir) {
         this.dir = dir;

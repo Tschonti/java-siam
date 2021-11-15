@@ -96,12 +96,14 @@ public class GUI extends JFrame {
                 for (int i = 0; i < board.getSupplySize(p); i++) {
                     rhinoSupplyCont.add(board.getSupplyCell(p, i));
                 }
+                rhinoSupplyCont.updateUI();
                 break;
             case ELEPHANT:
                 elephantSupplyCont.removeAll();
                 for (int i = 0; i < board.getSupplySize(p); i++) {
                     elephantSupplyCont.add(board.getSupplyCell(p, i));
                 }
+                elephantSupplyCont.updateUI();
                 break;
         }
     }

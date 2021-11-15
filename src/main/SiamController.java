@@ -26,11 +26,18 @@ public class SiamController {
         if (game_s == GameState.STARTED) {
             if (round_s == RoundState.PICK_FIGURINE && onTurn == pl) {
                 source = p;
+                if (!source.equals(Position.bench())) {
+                    board.toggleHighlights(source, true);
+                }
                 stateChange(game_s, RoundState.next(round_s), onTurn);
             } else if (round_s == RoundState.PICK_DESTINATION && onTurn == pl) {
                 if (p.equals(Position.bench()) && !source.equals(Position.bench())) {
                     board.moveToBench(source, onTurn);
+                    board.toggleHighlights(source, false);
                     stateChange(game_s, RoundState.first(), Player.swap(onTurn));
+                } else if (source.equals(p)) {
+                    movingDirection = null;
+                    stateChange(game_s, RoundState.next(round_s), onTurn);
                 }
             }
         }
@@ -77,6 +84,7 @@ public class SiamController {
             if (source.equals(Position.bench())) {
                 board.moveFromBench(dest, onTurn, d);
             } else {
+                board.toggleHighlights(source, false);
                 board.moveOnBoard(source, movingDirection, d);
             }
             stateChange(game_s, RoundState.first(), Player.swap(onTurn));

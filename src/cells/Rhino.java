@@ -18,7 +18,9 @@ public class Rhino extends Animal {
         add(dirLabel);
     }
 
-    public void setHighlighted(boolean f) {
+    public void setHighlightedForMove(boolean f) {    }
+
+    public void setHighlightedCenter(boolean f) {
         if (f) {
             setBackground(new Color(112, 5, 5));
         } else {

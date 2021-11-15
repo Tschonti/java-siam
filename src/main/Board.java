@@ -38,13 +38,16 @@ public class Board implements GameModell, Serializable {
 
     @Override
     public void moveOnBoard(Position src, Direction moveDir, Direction facingDir) {
-        Position dest = new Position(src.getX() + moveDir.x, src.getY() + moveDir.y);
-        Cell temp = board[dest.getY()][dest.getX()];
-        board[dest.getY()][dest.getX()] = board[src.getY()][src.getX()];
-        board[src.getY()][src.getX()] = temp;
+        Position dest = new Position(src.getX(), src.getY());
+        if (moveDir != null) {
+            dest = new Position(src.getX() + moveDir.x, src.getY() + moveDir.y);
+            Cell temp = board[dest.getY()][dest.getX()];
+            board[dest.getY()][dest.getX()] = board[src.getY()][src.getX()];
+            board[src.getY()][src.getX()] = temp;
 
-        board[src.getY()][src.getX()].setPos(new Position(src.getX(), src.getY()));
-        board[dest.getY()][dest.getX()].setPos(new Position(dest.getX(), dest.getY()));
+            board[src.getY()][src.getX()].setPos(new Position(src.getX(), src.getY()));
+            board[dest.getY()][dest.getX()].setPos(new Position(dest.getX(), dest.getY()));
+        }
         board[dest.getY()][dest.getX()].setDir(facingDir);
 
         g.drawBoard();
@@ -83,8 +86,20 @@ public class Board implements GameModell, Serializable {
     }
 
     @Override
-    public void showMoveOptions(Position src) {
+    public void toggleHighlights(Position src, boolean b) {
+        board[src.getY()][src.getX()].setHighlightedCenter(b);
 
+        for(int dx = -1; dx < 2; dx += 2) {
+            if (src.getX() + dx >= 0 && src.getX() + dx < 5) {
+                board[src.getY()][src.getX() + dx].setHighlightedForMove(b);
+            }
+        }
+
+        for(int dy = -1; dy < 2; dy += 2) {
+            if (src.getY() + dy >= 0 && src.getY() + dy < 5) {
+                board[src.getY() + dy][src.getX()].setHighlightedForMove(b);
+            }
+        }
     }
 
     @Override

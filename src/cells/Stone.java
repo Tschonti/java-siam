@@ -12,6 +12,10 @@ public class Stone extends Cell {
         setBackground(new Color(105, 105, 105));
     }
 
+    public void setHighlightedForMove(boolean f) {}
+
+    public void setHighlightedCenter(boolean f) {}
+
     public int getStrengthForPush(Direction d) {
         return -1;
     }
