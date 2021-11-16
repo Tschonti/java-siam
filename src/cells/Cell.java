@@ -29,7 +29,13 @@ public class Cell extends JPanel {
         }
     }
 
-    public void setHighlightedCenter(boolean f) {}
+    public void setHighlightedCenter(boolean f) {
+        if (f) {
+            setBackground(new Color(68, 112, 203));
+        } else {
+            setBackground(new Color(157, 157, 157));
+        }
+    }
 
     public void setDir(Direction dir) {
         this.dir = dir;

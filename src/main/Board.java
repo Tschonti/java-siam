@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Board implements GameModell, Serializable {
-    private Cell[][] board;
-    private ArrayList<Elephant> elephantSupply;
-    private ArrayList<Rhino> rhinoSupply;
+    private final Cell[][] board;
+    private final ArrayList<Elephant> elephantSupply;
+    private final ArrayList<Rhino> rhinoSupply;
     private GUI g;
 
     public Board() {
@@ -86,9 +86,7 @@ public class Board implements GameModell, Serializable {
     }
 
     @Override
-    public void toggleHighlights(Position src, boolean b) {
-        board[src.getY()][src.getX()].setHighlightedCenter(b);
-
+    public void toggleMoveHighlights(Position src, boolean b) {
         for(int dx = -1; dx < 2; dx += 2) {
             if (src.getX() + dx >= 0 && src.getX() + dx < 5) {
                 board[src.getY()][src.getX() + dx].setHighlightedForMove(b);
@@ -99,6 +97,26 @@ public class Board implements GameModell, Serializable {
             if (src.getY() + dy >= 0 && src.getY() + dy < 5) {
                 board[src.getY() + dy][src.getX()].setHighlightedForMove(b);
             }
+        }
+    }
+    public void toggleCenterHighlights(Position src, boolean b) {
+        board[src.getY()][src.getX()].setHighlightedCenter(b);
+    }
+
+    public void toggleOuterHighlights(boolean b) {
+        int y = 0;
+        int x = 0;
+        for(; x < 4; x++) {
+            board[y][x].setHighlightedForMove(b);
+        }
+        for(; y < 4; y++) {
+            board[y][x].setHighlightedForMove(b);
+        }
+        for(; x > 0; x--) {
+            board[y][x].setHighlightedForMove(b);
+        }
+        for(; y > 0; y--) {
+            board[y][x].setHighlightedForMove(b);
         }
     }
 
