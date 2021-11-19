@@ -7,9 +7,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
-public class PickActionPanel extends JPanel implements ActionListener {
+public class PickActionPanel extends JPanel implements ActionListener, ComponentListener {
     private final SiamController cont;
+    JButton push;
 
     public PickActionPanel(SiamController c) {
         cont = c;
@@ -19,7 +22,7 @@ public class PickActionPanel extends JPanel implements ActionListener {
         setBackground(new Color(206, 97, 1));
 
         JButton moveRotate = new JButton("Move and/or rotate");
-        JButton push = new JButton("Push");
+        push = new JButton("Push");
         JButton back = new JButton("Cancel");
 
         moveRotate.setActionCommand("moveRotate");
@@ -29,6 +32,7 @@ public class PickActionPanel extends JPanel implements ActionListener {
         moveRotate.addActionListener(this);
         push.addActionListener(this);
         back.addActionListener(this);
+        addComponentListener(this);
 
         add(moveRotate);
         add(push);
@@ -45,5 +49,19 @@ public class PickActionPanel extends JPanel implements ActionListener {
             cont.clickedOnCancel(RoundState.PICK_ACTION);
         }
     }
+
+    @Override
+    public void componentResized(ComponentEvent e) {}
+
+    @Override
+    public void componentMoved(ComponentEvent e) {}
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        push.setEnabled(cont.getStrength() >= 0);
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {}
 }
 

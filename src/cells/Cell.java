@@ -57,8 +57,8 @@ public class Cell extends JPanel {
         controller = c;
     }
 
-    public int getStrengthForPush(Direction d) {
-        return 0;
+    public Integer getStrengthForPush(Direction d) {
+        return null;
     }
 
     class CellClickListener extends MouseAdapter {

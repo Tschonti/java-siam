@@ -7,12 +7,12 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class GUI extends JFrame {
-    private JPanel boardCont;
-    private JPanel elephantSupplyCont;
-    private JPanel rhinoSupplyCont;
-    private JPanel rightActions;
-    private Board board;
-    private PlayerOnTurnPanel potp;
+    private final JPanel boardCont;
+    private final JPanel elephantSupplyCont;
+    private final JPanel rhinoSupplyCont;
+    private final JPanel rightActions;
+    private final Board board;
+    private final PlayerOnTurnPanel potp;
     static private HashMap<RoundState, String> stateToPanel;
 
     public GUI(Board b, SiamController c) {

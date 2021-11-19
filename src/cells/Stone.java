@@ -16,7 +16,7 @@ public class Stone extends Cell {
 
     public void setHighlightedCenter(boolean f) {}
 
-    public int getStrengthForPush(Direction d) {
+    public Integer getStrengthForPush(Direction d) {
         return -1;
     }
 }

@@ -11,6 +11,7 @@ public class SiamController {
     private Position source;
     private Position dest;
     private Direction movingDirection;
+    private int strength;
 
     public SiamController() {
         game_s = GameState.STARTED;
@@ -26,6 +27,7 @@ public class SiamController {
         if (game_s == GameState.STARTED) {
             if (round_s == RoundState.PICK_FIGURINE && onTurn == pl) {
                 source = p;
+                strength = board.calculateStrength(source);
                 if (!source.equals(Position.bench())) {
                     board.toggleCenterHighlights(source, true);
                 }
@@ -133,24 +135,8 @@ public class SiamController {
         }
     }
 
-    public void clickedOnActionCancel() {
-        if (game_s == GameState.STARTED && round_s == RoundState.PICK_DESTINATION) {
-            stateChange(game_s, RoundState.previous(round_s), onTurn);
-        }
-    }
-
-    public void clickedOnFigurineCancel() {
-        if (game_s == GameState.STARTED && round_s == RoundState.PICK_ACTION) {
-            source = null;
-            stateChange(game_s, RoundState.previous(round_s), onTurn);
-        }
-    }
-
-    public void clickedOnDestinationCancel() {
-        if (game_s == GameState.STARTED && round_s == RoundState.PICK_DIRECTION) {
-            dest = null;
-            stateChange(game_s, RoundState.previous(round_s), onTurn);
-        }
+    public int getStrength() {
+        return strength;
     }
 
     private void stateChange( GameState gs, RoundState rs, Player p) {

@@ -23,7 +23,7 @@ public abstract class Animal extends Cell {
         }
     }
 
-    public int getStrengthForPush(Direction d) {
+    public Integer getStrengthForPush(Direction d) {
         if (d.equals(dir)) {
             return 1;
         } else if (dir.x + d.x == 0 && dir.y + d.y == 0) {

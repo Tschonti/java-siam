@@ -42,6 +42,9 @@ public class PickDirectionPanel extends JPanel implements ActionListener {
         add(down, BorderLayout.SOUTH);
         add(left, BorderLayout.WEST);
         add(back, BorderLayout.CENTER);
+
+        setFocusable(true);
+        requestFocusInWindow();
     }
 
     @Override

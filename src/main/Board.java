@@ -122,7 +122,25 @@ public class Board implements GameModell, Serializable {
 
     @Override
     public int calculateStrength(Position src) {
-        return 0;
+        if (src.equals(Position.bench())) {
+            return -1;
+        }
+        Direction pushDir = board[src.getY()][src.getX()].getDir();
+        if (isOutOfBounds(new Position(src.getX() + pushDir.x, src.getY() + pushDir.y))) {
+            return -1;
+        }
+        Position moving = new Position(src.getX(), src.getY());
+        int sum = 0;
+        while (!isOutOfBounds(moving)) {
+            Integer str = board[moving.getY()][moving.getX()].getStrengthForPush(pushDir);
+            if (str == null) {
+                return sum;
+            }
+            sum += str;
+            moving.setX(moving.getX() + pushDir.x);
+            moving.setY(moving.getY() + pushDir.y);
+        }
+        return sum;
     }
 
     @Override
@@ -154,5 +172,9 @@ public class Board implements GameModell, Serializable {
         if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
             return true;
         } else return (p.getX() == 0 || p.getX() == 4) && p.getY() >= 0 && p.getY() <= 4;
+    }
+
+    private static boolean isOutOfBounds(Position p) {
+        return p.getX() < 0 || p.getY() < 0 || p.getX() > 4 || p.getY() > 4;
     }
 }
