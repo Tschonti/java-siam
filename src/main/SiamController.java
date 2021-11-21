@@ -54,7 +54,7 @@ public class SiamController {
             if (round_s == RoundState.PICK_DESTINATION) {
                 Position bench = new Position(-1, -1);
                 if (source.equals(bench)) {
-                    if (!Board.isInOuterCells(p)) {
+                    if (!Position.isInOuterCells(p)) {
                         return;
                     }
                     board.toggleOuterHighlights(false);
@@ -133,6 +133,14 @@ public class SiamController {
                     }
             }
             stateChange(game_s, RoundState.previous(round_s), onTurn);
+        }
+    }
+
+    public void gameOver(Player winner) {
+        stateChange(GameState.GAME_OVER, round_s, onTurn);
+        switch (winner) {
+            case RHINO: System.out.println("Rhino is the winner!"); break;
+            case ELEPHANT: System.out.println("Elephant is the winner!"); break;
         }
     }
 

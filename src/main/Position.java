@@ -55,4 +55,10 @@ public class Position {
     public static boolean isOutOfBounds(Position p) {
         return p.getX() < 0 || p.getY() < 0 || p.getX() > 4 || p.getY() > 4;
     }
+
+    public static boolean isInOuterCells(Position p) {
+        if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
+            return true;
+        } else return (p.getX() == 0 || p.getX() == 4) && p.getY() >= 0 && p.getY() <= 4;
+    }
 }

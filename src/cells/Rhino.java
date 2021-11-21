@@ -39,6 +39,10 @@ public class Rhino extends Animal {
         return result;
     }
 
+    public void finisherCell() {
+        controller.gameOver(Player.RHINO);
+    }
+
     class RhinoClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {

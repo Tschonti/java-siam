@@ -41,6 +41,10 @@ public class Elephant extends Animal {
         return result;
     }
 
+    public void finisherCell() {
+        controller.gameOver(Player.ELEPHANT);
+    }
+
     class ElephantClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {

@@ -5,6 +5,8 @@ import cells.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static main.Position.isInOuterCells;
+
 public class Board implements GameModell, Serializable {
     private final Cell[][] board;
     private final ArrayList<Elephant> elephantSupply;
@@ -148,9 +150,21 @@ public class Board implements GameModell, Serializable {
 
     @Override
     public void push(Position src) {
-        boolean result = board[src.getY()][src.getX()].initiatePush(board[src.getY()][src.getX()].getDir());
+        Direction pushDir = board[src.getY()][src.getX()].getDir();
+        boolean result = board[src.getY()][src.getX()].initiatePush(pushDir);
         if (result) {
-            System.out.println("végeee");
+            Position moving = new Position(src.getX() + pushDir.x, src.getY() + pushDir.y);
+            while (!Position.isInOuterCells(moving)) {
+                moving.setX(moving.getX() + pushDir.x);
+                moving.setY(moving.getY() + pushDir.y);
+            }
+            Cell finisher = board[moving.getY()][moving.getX()];
+            while (finisher.getDir() != pushDir) {
+                moving.setX(moving.getX() - pushDir.x);
+                moving.setY(moving.getY() - pushDir.y);
+                finisher = board[moving.getY()][moving.getX()];
+            }
+            finisher.finisherCell();
         }
     }
 
@@ -175,11 +189,5 @@ public class Board implements GameModell, Serializable {
             case RHINO: return rhinoSupply.size();
             default: return 0;
         }
-    }
-
-    public static boolean isInOuterCells(Position p) {
-        if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
-            return true;
-        } else return (p.getX() == 0 || p.getX() == 4) && p.getY() >= 0 && p.getY() <= 4;
     }
 }
