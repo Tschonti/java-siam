@@ -19,6 +19,7 @@ public class SiamController {
         onTurn = Player.ELEPHANT;
         board = new Board();
         Cell.setController(this);
+        Cell.setBoard(board);
         g = new GUI(board, this);
         board.setGUI(g);
     }
@@ -85,8 +86,8 @@ public class SiamController {
 
     public void clickedOnPush() {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_ACTION) {
+            board.toggleCenterHighlights(source, false);
             board.push(source);
-
             stateChange(game_s, RoundState.first(), Player.swap(onTurn));
         }
     }

@@ -51,4 +51,8 @@ public class Position {
     public static Position bench() {
         return new Position(-1, -1);
     }
+
+    public static boolean isOutOfBounds(Position p) {
+        return p.getX() < 0 || p.getY() < 0 || p.getX() > 4 || p.getY() > 4;
+    }
 }

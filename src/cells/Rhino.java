@@ -28,6 +28,17 @@ public class Rhino extends Animal {
         }
     }
 
+    public boolean initiatePush(Direction d) {
+        Position next = new Position(pos.getX() + d.x, pos.getY() + d.y);
+        if (Position.isOutOfBounds(next)) {
+            b.moveToBench(pos, Player.RHINO);
+            return false;
+        }
+        boolean result =  b.getCell(next).initiatePush(d);
+        b.moveOnBoard(pos, d, dir);
+        return result;
+    }
+
     class RhinoClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {

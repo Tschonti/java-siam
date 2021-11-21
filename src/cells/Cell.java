@@ -1,5 +1,6 @@
 package cells;
 
+import main.Board;
 import main.Direction;
 import main.Position;
 import main.SiamController;
@@ -13,6 +14,7 @@ public class Cell extends JPanel {
     protected Position pos;
     protected Direction dir;
     static protected SiamController controller;
+    static protected Board b;
 
     public Cell(Position p) {
         pos = p;
@@ -37,6 +39,10 @@ public class Cell extends JPanel {
         }
     }
 
+    public boolean initiatePush(Direction d) {
+        return false;
+    }
+
     public void setDir(Direction dir) {
         this.dir = dir;
     }
@@ -55,6 +61,10 @@ public class Cell extends JPanel {
 
     static public void setController(SiamController c) {
         controller = c;
+    }
+
+    static public void setBoard(Board board) {
+        b = board;
     }
 
     public Integer getStrengthForPush(Direction d) {

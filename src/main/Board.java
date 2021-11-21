@@ -55,7 +55,6 @@ public class Board implements GameModell, Serializable {
 
     @Override
     public void moveToBench(Position source, Player bench) {
-        System.out.println("sfds");
         board[source.getY()][source.getX()].setPos(new Position(-1, -1));
         switch (bench) {
             case RHINO:
@@ -83,6 +82,10 @@ public class Board implements GameModell, Serializable {
         g.drawBoard();
         g.drawSupply(bench);
         return true;
+    }
+
+    public void removeFromBoard(Position p) {
+        board[p.getY()][p.getX()] = new Cell(p);
     }
 
     @Override
@@ -126,12 +129,12 @@ public class Board implements GameModell, Serializable {
             return -1;
         }
         Direction pushDir = board[src.getY()][src.getX()].getDir();
-        if (isOutOfBounds(new Position(src.getX() + pushDir.x, src.getY() + pushDir.y))) {
+        if (Position.isOutOfBounds(new Position(src.getX() + pushDir.x, src.getY() + pushDir.y))) {
             return -1;
         }
         Position moving = new Position(src.getX(), src.getY());
         int sum = 0;
-        while (!isOutOfBounds(moving)) {
+        while (!Position.isOutOfBounds(moving)) {
             Integer str = board[moving.getY()][moving.getX()].getStrengthForPush(pushDir);
             if (str == null) {
                 return sum;
@@ -145,11 +148,17 @@ public class Board implements GameModell, Serializable {
 
     @Override
     public void push(Position src) {
-
+        boolean result = board[src.getY()][src.getX()].initiatePush(board[src.getY()][src.getX()].getDir());
+        if (result) {
+            System.out.println("végeee");
+        }
     }
 
     public Cell getCell(int x, int y) {
         return board[y][x];
+    }
+    public Cell getCell(Position p) {
+        return board[p.getY()][p.getX()];
     }
 
     public Cell getSupplyCell(Player p, int idx) {
@@ -172,9 +181,5 @@ public class Board implements GameModell, Serializable {
         if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
             return true;
         } else return (p.getX() == 0 || p.getX() == 4) && p.getY() >= 0 && p.getY() <= 4;
-    }
-
-    private static boolean isOutOfBounds(Position p) {
-        return p.getX() < 0 || p.getY() < 0 || p.getX() > 4 || p.getY() > 4;
     }
 }
