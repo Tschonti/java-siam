@@ -11,8 +11,9 @@ public class GUI extends JFrame {
     private final JPanel elephantSupplyCont;
     private final JPanel rhinoSupplyCont;
     private final JPanel rightActions;
-    private final Board board;
+    private Board board;
     private final PlayerOnTurnPanel potp;
+    private final GameControlPanel gcp;
     static private HashMap<RoundState, String> stateToPanel;
 
     public GUI(Board b, SiamController c) {
@@ -40,10 +41,13 @@ public class GUI extends JFrame {
         left.add(elephantSupplyCont, BorderLayout.SOUTH);
 
         //right side
-        CardLayout cl = new CardLayout(20, 20);
         JPanel right = new JPanel(new BorderLayout());
         add(right, BorderLayout.EAST);
 
+        gcp = new GameControlPanel(c);
+        right.add(gcp, BorderLayout.WEST);
+
+        CardLayout cl = new CardLayout(20, 20);
         rightActions = new JPanel();
         rightActions.setLayout(cl);
 
@@ -71,12 +75,18 @@ public class GUI extends JFrame {
 
         rightActions.setPreferredSize(new Dimension(640, 640));
 
+        potp.setVisible(false);
+        rightActions.setVisible(false);
         board = b;
         drawBoard();
         drawSupply(Player.ELEPHANT);
         drawSupply(Player.RHINO);
         setVisible(true);
 
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public void drawBoard() {
@@ -108,11 +118,29 @@ public class GUI extends JFrame {
         }
     }
 
-    public void stateSwitch(GameState gs, RoundState rs, Player onTurn) {
-        if (gs == GameState.STARTED) {
-            CardLayout cl = (CardLayout) rightActions.getLayout();
-            cl.show(rightActions, stateToPanel.get(rs));
-            potp.switchPlayer(onTurn);
+    public void roundStateSwitch(RoundState rs, Player onTurn) {
+        CardLayout cl = (CardLayout) rightActions.getLayout();
+        cl.show(rightActions, stateToPanel.get(rs));
+        potp.switchPlayer(onTurn);
+    }
+
+    public void gameStateSwitch(GameState gs, Player winner) {
+        switch (gs) {
+            case NOT_STARTED:
+                gcp.setLabelText("");
+            case STARTED:
+                potp.setVisible(true);
+                rightActions.setVisible(true);
+                gcp.setSaveEnabled(true);
+                break;
+            case GAME_OVER:
+                potp.setVisible(false);
+                rightActions.setVisible(false);
+                switch (winner) {
+                    case ELEPHANT: gcp.setLabelText("Elephant is the winner!"); break;
+                    case RHINO: gcp.setLabelText("Rhino is the winner!");
+                }
+                gcp.setSaveEnabled(false);
         }
     }
 

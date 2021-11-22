@@ -14,14 +14,31 @@ public class SiamController {
     private int strength;
 
     public SiamController() {
-        game_s = GameState.STARTED;
-        round_s = RoundState.PICK_FIGURINE;
-        onTurn = Player.ELEPHANT;
+        game_s = GameState.NOT_STARTED;
         board = new Board();
         Cell.setController(this);
         Cell.setBoard(board);
         g = new GUI(board, this);
         board.setGUI(g);
+    }
+
+    public void newGame() {
+        board = new Board();
+        Cell.setBoard(board);
+        g.setBoard(board);
+        g.drawBoard();
+        g.drawSupply(Player.ELEPHANT);
+        g.drawSupply(Player.RHINO);
+        board.setGUI(g);
+        stateChange(GameState.STARTED, RoundState.PICK_FIGURINE, Player.ELEPHANT);
+    }
+
+    public void loadGame() {
+
+    }
+
+    public void saveGame() {
+
     }
 
     public void clickedOnAnimal(Position p, Player pl) {
@@ -137,11 +154,7 @@ public class SiamController {
     }
 
     public void gameOver(Player winner) {
-        stateChange(GameState.GAME_OVER, round_s, onTurn);
-        switch (winner) {
-            case RHINO: System.out.println("Rhino is the winner!"); break;
-            case ELEPHANT: System.out.println("Elephant is the winner!"); break;
-        }
+        stateChange(GameState.GAME_OVER, round_s, winner);
     }
 
     public int getStrength() {
@@ -149,9 +162,12 @@ public class SiamController {
     }
 
     private void stateChange( GameState gs, RoundState rs, Player p) {
+        if (game_s != gs ) {
+            g.gameStateSwitch(gs, p);
+        }
         round_s = rs;
         game_s = gs;
         onTurn = p;
-        g.stateSwitch(game_s, round_s, onTurn);
+        g.roundStateSwitch(round_s, onTurn);
     }
 }
