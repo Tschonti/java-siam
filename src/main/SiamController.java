@@ -31,6 +31,9 @@ public class SiamController {
         g.drawSupply(Player.RHINO);
         board.setGUI(g);
         stateChange(GameState.STARTED, RoundState.PICK_FIGURINE, Player.ELEPHANT);
+
+        g.toggleSupplyHighlight(Player.ELEPHANT, false, true);
+        g.toggleSupplyHighlight(Player.RHINO, false, true);
     }
 
     public void loadGame() {
@@ -70,6 +73,7 @@ public class SiamController {
     }
 
     public void clickedOnCell(Position p) {
+        System.out.println("gergdf");
         if (game_s == GameState.STARTED) {
             if (round_s == RoundState.PICK_DESTINATION) {
                 Position bench = new Position(-1, -1);

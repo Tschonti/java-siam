@@ -5,10 +5,15 @@ import main.Position;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 
 public class Stone extends Cell {
     public Stone(Position p) {
         super(p);
+        MouseListener[] ml = getMouseListeners();
+        for(MouseListener m : ml) {
+            removeMouseListener(m);
+        }
         setBackground(new Color(105, 105, 105));
     }
 

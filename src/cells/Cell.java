@@ -75,7 +75,7 @@ public class Cell extends JPanel {
         return null;
     }
 
-    class CellClickListener extends MouseAdapter {
+    public class CellClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             controller.clickedOnCell(pos);

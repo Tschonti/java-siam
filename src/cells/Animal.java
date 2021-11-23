@@ -4,12 +4,17 @@ import main.Direction;
 import main.Position;
 
 import javax.swing.*;
+import java.awt.event.MouseListener;
 
 public abstract class Animal extends Cell {
     protected JLabel dirLabel;
 
     public Animal(Position p, Direction d) {
         super(p);
+        MouseListener[] ml = getMouseListeners();
+        for(MouseListener m : ml) {
+            removeMouseListener(m);
+        }
         dir = d;
     }
 

@@ -2,12 +2,11 @@ package main;
 
 import cells.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static main.Position.isInOuterCells;
 
-public class Board implements GameModell, Serializable {
+public class Board implements GameModell {
     private final Cell[][] board;
     private final ArrayList<Elephant> elephantSupply;
     private final ArrayList<Rhino> rhinoSupply;
@@ -67,7 +66,7 @@ public class Board implements GameModell, Serializable {
                 elephantSupply.add((Elephant) board[source.getY()][source.getX()]);
                 board[source.getY()][source.getX()].setDir(Direction.UP);
         }
-        board[source.getY()][source.getX()] = new Cell(new Position(source.getX(), source.getY()));
+        board[source.getY()][source.getX()] = new Cell(source);
         g.drawBoard();
         g.drawSupply(bench);
     }
