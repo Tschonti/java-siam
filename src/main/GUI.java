@@ -91,7 +91,6 @@ public class GUI extends JFrame {
         drawSupply(Player.ELEPHANT);
         drawSupply(Player.RHINO);
         setVisible(true);
-
     }
 
     public void setBoard(Board board) {
@@ -167,6 +166,23 @@ public class GUI extends JFrame {
                 }
                 gcp.setSaveEnabled(false);
         }
+    }
+
+    public String showFileChooser(String buttonText) {
+        JFileChooser chooser = new JFileChooser();
+        int val = chooser.showDialog(this, buttonText);
+        if (val == JFileChooser.APPROVE_OPTION) {
+            return chooser.getSelectedFile().getName();
+        }
+        return null;
+    }
+
+    public boolean confirmNewGame() {
+        JOptionPane opt = new JOptionPane("Are you sure you want to start a new game? Any unsaven progress will be lost!",
+                JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JDialog jd = opt.createDialog("New Game");
+        jd.setVisible(true);
+        return !(opt.getValue() == null || opt.getValue().equals(JOptionPane.CANCEL_OPTION));
     }
 
     class ElephantSupplyClickListener extends MouseAdapter {

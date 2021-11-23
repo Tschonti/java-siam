@@ -6,8 +6,10 @@ public class SiamController {
     private GameState game_s;
     private RoundState round_s;
     private Player onTurn;
-    Board board;
-    GUI g;
+
+    private Board board;
+    private final GUI g;
+
     private Position source;
     private Position dest;
     private Direction movingDirection;
@@ -23,6 +25,12 @@ public class SiamController {
     }
 
     public void newGame() {
+        if (game_s == GameState.STARTED) {
+            if (!g.confirmNewGame()) {
+                return;
+            }
+        }
+
         board = new Board();
         Cell.setBoard(board);
         g.setBoard(board);
@@ -37,63 +45,67 @@ public class SiamController {
     }
 
     public void loadGame() {
-
+        String filename = g.showFileChooser("Load");
+        if (filename != null) {
+            System.out.println(filename);
+        }
     }
 
     public void saveGame() {
-
+        String filename = g.showFileChooser("Save");
+        if (filename != null) {
+            System.out.println(filename);
+        }
     }
 
     public void clickedOnAnimal(Position p, Player pl) {
-        if (game_s == GameState.STARTED) {
-            if (round_s == RoundState.PICK_FIGURINE && onTurn == pl) {
-                source = p;
-                strength = board.calculateStrength(source);
-                if (!source.equals(Position.bench())) {
-                    board.toggleCenterHighlights(source, true);
-                } else {
-                    g.toggleSupplyHighlight(onTurn, true, true);
-                }
-                stateChange(game_s, RoundState.next(round_s), onTurn);
-            } else if (round_s == RoundState.PICK_DESTINATION && onTurn == pl) {
-                if (p.equals(Position.bench()) && !source.equals(Position.bench())) {
-                    board.toggleMoveHighlights(source, false);
-                    board.toggleCenterHighlights(source, false);
-                    g.toggleSupplyHighlight(onTurn, false, false);
-                    board.moveToBench(source, onTurn);
-                    stateChange(game_s, RoundState.first(), Player.swap(onTurn));
-                } else if (source.equals(p)) {
-                    movingDirection = null;
-                    board.toggleMoveHighlights(source, false);
+        if (game_s == GameState.STARTED && onTurn == pl) {
+            switch (round_s) {
+                case PICK_FIGURINE:
+                    source = p;
+                    strength = board.calculateStrength(source);
+                    if (!source.equals(Position.bench())) {
+                        board.toggleCenterHighlights(source, true);
+                    } else {
+                        g.toggleSupplyHighlight(onTurn, true, true);
+                    }
                     stateChange(game_s, RoundState.next(round_s), onTurn);
-                }
+                    break;
+                case PICK_DESTINATION:
+                    if (p.equals(Position.bench()) && !source.equals(Position.bench())) {
+                        board.toggleMoveHighlights(source, false);
+                        board.toggleCenterHighlights(source, false);
+                        g.toggleSupplyHighlight(onTurn, false, false);
+                        board.moveToBench(source, onTurn);
+                        stateChange(game_s, RoundState.first(), Player.swap(onTurn));
+                    } else if (source.equals(p)) {
+                        movingDirection = null;
+                        board.toggleMoveHighlights(source, false);
+                        stateChange(game_s, RoundState.next(round_s), onTurn);
+                    }
             }
         }
         System.out.println((pl == Player.ELEPHANT ? "Elefánt" : "Orrszarvú") + " x: " + p.getX() + ", y: " + p.getY());
     }
 
     public void clickedOnCell(Position p) {
-        System.out.println("gergdf");
-        if (game_s == GameState.STARTED) {
-            if (round_s == RoundState.PICK_DESTINATION) {
-                Position bench = new Position(-1, -1);
-                if (source.equals(bench)) {
-                    if (!Position.isInOuterCells(p)) {
-                        return;
-                    }
-                    board.toggleOuterHighlights(false);
-                } else {
-                    movingDirection = Position.whichWayToStep(source, p);
-                    if (movingDirection == null) {
-                        return;
-                    }
-                    g.toggleSupplyHighlight(onTurn, false, false);
-                    board.toggleMoveHighlights(source, false);
+        if (game_s == GameState.STARTED && round_s == RoundState.PICK_DESTINATION) {
+            if (source.equals(Position.bench())) {
+                if (!Position.isInOuterCells(p)) {
+                    return;
                 }
-                dest = p;
-                board.toggleCenterHighlights(dest, true);
-                stateChange(game_s, RoundState.next(round_s), onTurn);
+                board.toggleOuterHighlights(false);
+            } else {
+                movingDirection = Position.whichWayToStep(source, p);
+                if (movingDirection == null) {
+                    return;
+                }
+                g.toggleSupplyHighlight(onTurn, false, false);
+                board.toggleMoveHighlights(source, false);
             }
+            dest = p;
+            board.toggleCenterHighlights(dest, true);
+            stateChange(game_s, RoundState.next(round_s), onTurn);
         }
         System.out.println("cell x: " + p.getX() + ", y: " + p.getY());
     }
