@@ -4,6 +4,10 @@ import panels.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
 public class GUI extends JFrame {
@@ -12,6 +16,7 @@ public class GUI extends JFrame {
     private final JPanel rhinoSupplyCont;
     private final JPanel rightActions;
     private Board board;
+    private final SiamController cont;
     private final PlayerOnTurnPanel potp;
     private final GameControlPanel gcp;
     static private HashMap<RoundState, String> stateToPanel;
@@ -35,6 +40,9 @@ public class GUI extends JFrame {
 
         elephantSupplyCont.setPreferredSize(new Dimension(640, 128));
         rhinoSupplyCont.setPreferredSize(new Dimension(640, 128));
+
+        elephantSupplyCont.addMouseListener(new ElephantSupplyClickListener());
+        rhinoSupplyCont.addMouseListener(new RhinoSupplyClickListener());
 
         left.add(rhinoSupplyCont, BorderLayout.NORTH);
         left.add(boardCont, BorderLayout.CENTER);
@@ -78,6 +86,7 @@ public class GUI extends JFrame {
         potp.setVisible(false);
         rightActions.setVisible(false);
         board = b;
+        cont = c;
         drawBoard();
         drawSupply(Player.ELEPHANT);
         drawSupply(Player.RHINO);
@@ -118,6 +127,22 @@ public class GUI extends JFrame {
         }
     }
 
+    public void toggleSupplyHighlight(Player p, boolean highlight, boolean center) {
+        Color c = UIManager.getColor ( "Panel.background" );
+        if (highlight && center) {
+            c = new Color(68, 112, 203);
+        } else if (highlight) {
+            c = new Color(128, 145, 180);
+        }
+        switch (p) {
+            case RHINO:
+                rhinoSupplyCont.setBackground(c);
+                break;
+            case ELEPHANT:
+                elephantSupplyCont.setBackground(c);
+        }
+    }
+
     public void roundStateSwitch(RoundState rs, Player onTurn) {
         CardLayout cl = (CardLayout) rightActions.getLayout();
         cl.show(rightActions, stateToPanel.get(rs));
@@ -144,4 +169,17 @@ public class GUI extends JFrame {
         }
     }
 
+    class ElephantSupplyClickListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            cont.clickedOnAnimal(Position.bench(), Player.ELEPHANT);
+        }
+    }
+
+    class RhinoSupplyClickListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            cont.clickedOnAnimal(Position.bench(), Player.RHINO);
+        }
+    }
 }

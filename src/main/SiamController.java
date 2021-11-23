@@ -48,12 +48,15 @@ public class SiamController {
                 strength = board.calculateStrength(source);
                 if (!source.equals(Position.bench())) {
                     board.toggleCenterHighlights(source, true);
+                } else {
+                    g.toggleSupplyHighlight(onTurn, true, true);
                 }
                 stateChange(game_s, RoundState.next(round_s), onTurn);
             } else if (round_s == RoundState.PICK_DESTINATION && onTurn == pl) {
                 if (p.equals(Position.bench()) && !source.equals(Position.bench())) {
                     board.toggleMoveHighlights(source, false);
                     board.toggleCenterHighlights(source, false);
+                    g.toggleSupplyHighlight(onTurn, false, false);
                     board.moveToBench(source, onTurn);
                     stateChange(game_s, RoundState.first(), Player.swap(onTurn));
                 } else if (source.equals(p)) {
@@ -80,6 +83,7 @@ public class SiamController {
                     if (movingDirection == null) {
                         return;
                     }
+                    g.toggleSupplyHighlight(onTurn, false, false);
                     board.toggleMoveHighlights(source, false);
                 }
                 dest = p;
@@ -96,6 +100,7 @@ public class SiamController {
                 board.toggleOuterHighlights(true);
             } else {
                 board.toggleMoveHighlights(source, true);
+                g.toggleSupplyHighlight(onTurn, true, false);
             }
             stateChange(game_s, RoundState.next(round_s), onTurn);
         }
@@ -113,6 +118,7 @@ public class SiamController {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_DIRECTION) {
             if (source.equals(Position.bench())) {
                 board.toggleCenterHighlights(dest, false);
+                g.toggleSupplyHighlight(onTurn, false, true);
                 board.moveFromBench(dest, onTurn, d);
             } else {
                 board.toggleCenterHighlights(source, false);
@@ -129,6 +135,8 @@ public class SiamController {
                 case PICK_ACTION:
                     if (!source.equals(Position.bench())) {
                         board.toggleCenterHighlights(source, false);
+                    } else  {
+                        g.toggleSupplyHighlight(onTurn, false, true);
                     }
                     source = null;
 
@@ -139,6 +147,7 @@ public class SiamController {
                         board.toggleOuterHighlights(true);
                     } else {
                         board.toggleMoveHighlights(source, true);
+                        g.toggleSupplyHighlight(onTurn, true, false);
                     }
                     dest = null;
                     break;
@@ -147,6 +156,7 @@ public class SiamController {
                         board.toggleOuterHighlights(false);
                     } else {
                         board.toggleMoveHighlights(source, false);
+                        g.toggleSupplyHighlight(onTurn, false, false);
                     }
             }
             stateChange(game_s, RoundState.previous(round_s), onTurn);
