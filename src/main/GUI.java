@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.HashMap;
 
 public class GUI extends JFrame {
@@ -199,21 +200,28 @@ public class GUI extends JFrame {
         }
     }
 
-    public String showFileChooser(String buttonText) {
+    public File showFileChooser(String buttonText) {
         JFileChooser chooser = new JFileChooser();
         int val = chooser.showDialog(this, buttonText);
         if (val == JFileChooser.APPROVE_OPTION) {
-            return chooser.getSelectedFile().getName();
+            return chooser.getSelectedFile();
         }
         return null;
     }
 
     public boolean confirmNewGame() {
-        JOptionPane opt = new JOptionPane("Are you sure you want to start a new game? Any unsaven progress will be lost!",
+        JOptionPane opt = new JOptionPane("Are you sure you want to abandon this game? Any unsaven progress will be lost!",
                 JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        JDialog jd = opt.createDialog("New Game");
+        JDialog jd = opt.createDialog("Abandon Game");
         jd.setVisible(true);
         return !(opt.getValue() == null || opt.getValue().equals(JOptionPane.CANCEL_OPTION));
+    }
+
+    public void errorMessage(String msg) {
+        JOptionPane opt = new JOptionPane(msg,
+                JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        JDialog jd = opt.createDialog("Error");
+        jd.setVisible(true);
     }
 
     class ElephantSupplyClickListener extends MouseAdapter {

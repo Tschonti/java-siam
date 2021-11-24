@@ -9,8 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.Serializable;
 
-public class Cell extends JPanel {
+public class Cell extends JPanel implements Serializable {
     protected Position pos;
     protected Direction dir;
     static protected SiamController controller;
@@ -73,6 +75,14 @@ public class Cell extends JPanel {
 
     public Integer getStrengthForPush(Direction d) {
         return null;
+    }
+
+    public void reAddListeners() {
+        MouseListener[] ml = getMouseListeners();
+        for(MouseListener m : ml) {
+            removeMouseListener(m);
+        }
+        addMouseListener(new CellClickListener());
     }
 
     public class CellClickListener extends MouseAdapter {

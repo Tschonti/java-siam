@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Rhino extends Animal {
     public Rhino(Position p) {
@@ -41,6 +42,14 @@ public class Rhino extends Animal {
 
     public void finisherCell() {
         controller.gameOver(Player.RHINO);
+    }
+
+    public void reAddListeners() {
+        MouseListener[] ml = getMouseListeners();
+        for(MouseListener m : ml) {
+            removeMouseListener(m);
+        }
+        addMouseListener(new RhinoClickListener());
     }
 
     class RhinoClickListener extends MouseAdapter {

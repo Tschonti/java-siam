@@ -2,15 +2,16 @@ package main;
 
 import cells.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static main.Position.isInOuterCells;
 
-public class Board implements GameModell {
+public class Board implements GameModell, Serializable {
     private final Cell[][] board;
     private final ArrayList<Elephant> elephantSupply;
     private final ArrayList<Rhino> rhinoSupply;
-    private GUI g;
+    private transient GUI g;
 
     public Board() {
         board = new Cell[5][5];
@@ -164,6 +165,14 @@ public class Board implements GameModell {
                 finisher = board[moving.getY()][moving.getX()];
             }
             finisher.finisherCell();
+        }
+    }
+
+    public void reAddCellListeners() {
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                board[y][x].reAddListeners();
+            }
         }
     }
 

@@ -2,7 +2,7 @@ package main;
 
 import cells.Cell;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class SiamController implements Serializable {
     private GameState game_s;
@@ -10,7 +10,7 @@ public class SiamController implements Serializable {
     private Player onTurn;
 
     private Board board;
-    private transient final GUI g;
+    transient private final GUI g;
 
     private Position source;
     private Position dest;
@@ -20,20 +20,19 @@ public class SiamController implements Serializable {
     public SiamController() {
         game_s = GameState.NOT_STARTED;
         board = new Board();
-        Cell.setController(this);
-        Cell.setBoard(board);
         g = new GUI(board, this);
         board.setGUI(g);
     }
 
-    public void newGame() {
+    public void newGame(Board b) {
         if (game_s == GameState.STARTED) {
             if (!g.confirmNewGame()) {
                 return;
             }
         }
-        board = new Board();
+        board = b == null ? new Board() : b;
         Cell.setBoard(board);
+        Cell.setController(this);
         g.setBoard(board);
         g.drawBoard();
         g.drawSupply(Player.ELEPHANT);
@@ -46,16 +45,53 @@ public class SiamController implements Serializable {
     }
 
     public void loadGame() {
-        String filename = g.showFileChooser("Load");
-        if (filename != null) {
-            System.out.println(filename);
+        File file = g.showFileChooser("Load");
+        if (file != null) {
+            try {
+                FileInputStream f = new FileInputStream(file);
+                ObjectInputStream in = new ObjectInputStream(f);
+                SiamController newCont = (SiamController)in.readObject();
+                in.close();
+
+                if (game_s == GameState.STARTED) {
+                    if (!g.confirmNewGame()) {
+                        return;
+                    }
+                }
+
+                game_s = GameState.NOT_STARTED;
+                newGame(newCont.board);
+                board.reAddCellListeners();
+
+                source = newCont.source;
+                dest = newCont.dest;
+                strength = newCont.strength;
+                movingDirection = newCont.movingDirection;
+                stateChange(game_s, newCont.round_s, newCont.onTurn);
+
+                if (source.equals(Position.bench()) && round_s != RoundState.PICK_FIGURINE) {
+                    g.toggleSupplyHighlight(onTurn, true, true);
+                } else if (!source.equals(Position.bench()) && round_s == RoundState.PICK_DESTINATION) {
+                    g.toggleSupplyHighlight(onTurn, true, false);
+                }
+            } catch(IOException | ClassNotFoundException ex) {
+                g.errorMessage("This file can't be imported, it most likely isn't a file created by this game.");
+            }
         }
     }
 
     public void saveGame() {
-        String filename = g.showFileChooser("Save");
-        if (filename != null) {
-            System.out.println(filename);
+        File file = g.showFileChooser("Save");
+        if (file != null) {
+            try {
+                FileOutputStream f =new FileOutputStream(file);
+                ObjectOutputStream out =new ObjectOutputStream(f);
+                out.writeObject(this);
+                out.close();
+            }
+            catch(IOException ex) {
+                g.errorMessage("There was a problem with saving, please try again!");
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Elephant extends Animal {
 
@@ -43,6 +44,14 @@ public class Elephant extends Animal {
 
     public void finisherCell() {
         controller.gameOver(Player.ELEPHANT);
+    }
+
+    public void reAddListeners() {
+        MouseListener[] ml = getMouseListeners();
+        for(MouseListener m : ml) {
+            removeMouseListener(m);
+        }
+        addMouseListener(new ElephantClickListener());
     }
 
     class ElephantClickListener extends MouseAdapter {

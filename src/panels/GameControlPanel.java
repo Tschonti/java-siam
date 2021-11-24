@@ -37,7 +37,7 @@ public class GameControlPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         switch (ae.getActionCommand()) {
-            case "newGame": cont.newGame(); break;
+            case "newGame": cont.newGame(null); break;
             case "saveGame": cont.saveGame(); break;
             case "loadGame": cont.loadGame(); break;
             case "exitGame": System.exit(0);
