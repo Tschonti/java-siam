@@ -14,7 +14,6 @@ public class GameControlPanel extends JPanel implements ActionListener {
     public GameControlPanel(SiamController c) {
         cont = c;
         setName("gameControl");
-        setBackground(new Color(8, 157, 112));
 
         JButton newGame = new JButton("New Game");
         newGame.setActionCommand("newGame");

@@ -16,7 +16,6 @@ public class PickDestinationPanel extends JPanel implements ActionListener {
         setName("pickDestination");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new JLabel("Pick where you want to move your animal!"));
-        setBackground(new Color(171, 16, 224));
         JButton backButton = new JButton("Cancel");
         backButton.setActionCommand("cancel");
         backButton.addActionListener(this);

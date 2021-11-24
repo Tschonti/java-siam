@@ -18,8 +18,7 @@ public class PickActionPanel extends JPanel implements ActionListener, Component
         cont = c;
         setName("pickAction");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JLabel("Pick which action you want to perform next!"));
-        setBackground(new Color(206, 97, 1));
+        add(new JLabel("<html><h1>Pick which action you want to perform next!</h1></html>"));
 
         JButton moveRotate = new JButton("Move and/or rotate");
         push = new JButton("Push");
@@ -34,8 +33,11 @@ public class PickActionPanel extends JPanel implements ActionListener, Component
         back.addActionListener(this);
         addComponentListener(this);
 
-        add(moveRotate);
-        add(push);
+        JPanel importantButtons = new JPanel();
+        importantButtons.add(moveRotate);
+        importantButtons.add(push);
+
+        add(importantButtons);
         add(back);
     }
 

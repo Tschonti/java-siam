@@ -27,11 +27,13 @@ public class GUI extends JFrame {
     public GUI(Board b, SiamController c) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Siam");
-        setSize(1280, 1024);
-        setLayout( new BorderLayout());
+        setSize(1280, 960);
+        setResizable(false);
+        setLayout(new BorderLayout(10, 0));
 
         // left side
-        JPanel left = new JPanel(new BorderLayout());
+        JPanel left = new JPanel(new BorderLayout(0, 5));
+        left.setPreferredSize(new Dimension(680, 960));
         add(left, BorderLayout.WEST);
 
         boardCont = new JPanel();
@@ -39,10 +41,10 @@ public class GUI extends JFrame {
         rhinoSupplyCont = new JPanel();
 
         boardCont.setLayout(new GridLayout(5, 5, 5, 5));
-        boardCont.setPreferredSize(new Dimension(640, 640));
+        boardCont.setPreferredSize(new Dimension(680, 660));
 
-        elephantSupplyCont.setPreferredSize(new Dimension(640, 128));
-        rhinoSupplyCont.setPreferredSize(new Dimension(640, 128));
+        elephantSupplyCont.setPreferredSize(new Dimension(680, 128));
+        rhinoSupplyCont.setPreferredSize(new Dimension(680, 128));
 
         elephantSupplyCont.addMouseListener(new ElephantSupplyClickListener());
         rhinoSupplyCont.addMouseListener(new RhinoSupplyClickListener());
@@ -52,19 +54,21 @@ public class GUI extends JFrame {
         left.add(elephantSupplyCont, BorderLayout.SOUTH);
 
         //right side
-        JPanel right = new JPanel(new BorderLayout());
+        JPanel right = new JPanel();
+        right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
+        right.setPreferredSize(new Dimension(590, 960));
         add(right, BorderLayout.EAST);
 
         gcp = new GameControlPanel(c);
-        right.add(gcp, BorderLayout.WEST);
+        right.add(gcp);
 
         CardLayout cl = new CardLayout(20, 20);
         rightActions = new JPanel();
         rightActions.setLayout(cl);
 
         potp = new PlayerOnTurnPanel();
-        right.add(potp, BorderLayout.EAST);
-        right.add(rightActions, BorderLayout.SOUTH);
+        right.add(potp);
+        right.add(rightActions);
 
         PickFigurinePanel pfp = new PickFigurinePanel();
         PickActionPanel pap = new PickActionPanel(c);
@@ -86,7 +90,7 @@ public class GUI extends JFrame {
         stateToPanel.put(RoundState.PICK_DESTINATION, pdp.getName());
         stateToPanel.put(RoundState.PICK_DIRECTION, pdirp.getName());
 
-        rightActions.setPreferredSize(new Dimension(640, 640));
+        rightActions.setPreferredSize(new Dimension(590, 640));
 
         //menu
         JMenuItem newGameMenu = new JMenuItem("New Game");

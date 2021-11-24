@@ -17,7 +17,6 @@ public class PickDirectionPanel extends JPanel implements ActionListener {
         setName("pickDirection");
         setLayout(new BorderLayout());
         add(new JLabel("Pick the direction you want your animal to be facing!"));
-        setBackground(new Color(119, 11, 227));
 
         JButton up = new JButton("^");
         JButton right = new JButton(">");

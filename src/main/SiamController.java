@@ -69,9 +69,9 @@ public class SiamController implements Serializable {
                 movingDirection = newCont.movingDirection;
                 stateChange(game_s, newCont.round_s, newCont.onTurn);
 
-                if (source.equals(Position.bench()) && round_s != RoundState.PICK_FIGURINE) {
+                if (source != null &&  source.equals(Position.bench()) && round_s != RoundState.PICK_FIGURINE) {
                     g.toggleSupplyHighlight(onTurn, true, true);
-                } else if (!source.equals(Position.bench()) && round_s == RoundState.PICK_DESTINATION) {
+                } else if (source != null && !source.equals(Position.bench()) && round_s == RoundState.PICK_DESTINATION) {
                     g.toggleSupplyHighlight(onTurn, true, false);
                 }
             } catch(IOException | ClassNotFoundException ex) {

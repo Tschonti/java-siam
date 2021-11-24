@@ -1,13 +1,12 @@
 package panels;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class PickFigurinePanel extends JPanel {
     public PickFigurinePanel() {
         setName("pickFigurine");
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JLabel("Pick the animals you want to perform an action with!"));
-        setBackground(new Color(16, 224, 162));
+        add(new JLabel("<html><h1>Pick the animals you want <br> to perform an action with!</h1>" +
+                "You can choose any of your animals, on or off the board." +
+                "</html>"));
     }
 }

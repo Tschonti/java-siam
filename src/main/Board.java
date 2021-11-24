@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static main.Position.isInOuterCells;
 
-public class Board implements GameModell, Serializable {
+public class Board implements Serializable {
     private final Cell[][] board;
     private final ArrayList<Elephant> elephantSupply;
     private final ArrayList<Rhino> rhinoSupply;
@@ -37,8 +37,6 @@ public class Board implements GameModell, Serializable {
 
     public void setGUI(GUI gui) { g = gui; }
 
-
-    @Override
     public void moveOnBoard(Position src, Direction moveDir, Direction facingDir) {
         Position dest = new Position(src.getX(), src.getY());
         if (moveDir != null) {
@@ -55,7 +53,6 @@ public class Board implements GameModell, Serializable {
         g.drawBoard();
     }
 
-    @Override
     public void moveToBench(Position source, Player bench) {
         board[source.getY()][source.getX()].setPos(new Position(-1, -1));
         switch (bench) {
@@ -72,7 +69,6 @@ public class Board implements GameModell, Serializable {
         g.drawSupply(bench);
     }
 
-    @Override
     public boolean moveFromBench(Position dest, Player bench, Direction newDir) {
         if (!isInOuterCells(dest)) {
             return false;
@@ -90,7 +86,6 @@ public class Board implements GameModell, Serializable {
         board[p.getY()][p.getX()] = new Cell(p);
     }
 
-    @Override
     public void toggleMoveHighlights(Position src, boolean b) {
         for(int dx = -1; dx < 2; dx += 2) {
             if (src.getX() + dx >= 0 && src.getX() + dx < 5) {
@@ -125,7 +120,6 @@ public class Board implements GameModell, Serializable {
         }
     }
 
-    @Override
     public int calculateStrength(Position src) {
         if (src.equals(Position.bench())) {
             return -1;
@@ -148,7 +142,6 @@ public class Board implements GameModell, Serializable {
         return sum;
     }
 
-    @Override
     public void push(Position src) {
         Direction pushDir = board[src.getY()][src.getX()].getDir();
         boolean result = board[src.getY()][src.getX()].initiatePush(pushDir);
