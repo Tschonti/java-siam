@@ -1,6 +1,5 @@
 package panels;
 
-import main.Player;
 import main.SiamController;
 
 import javax.swing.*;
@@ -11,17 +10,11 @@ import java.awt.event.ActionListener;
 public class GameControlPanel extends JPanel implements ActionListener {
     private final SiamController cont;
     JButton save;
-    JLabel label;
 
     public GameControlPanel(SiamController c) {
         cont = c;
         setName("gameControl");
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        JPanel buttons = new JPanel();
-        label = new JLabel();
         setBackground(new Color(8, 157, 112));
-        add(buttons);
-        add(label);
 
         JButton newGame = new JButton("New Game");
         newGame.setActionCommand("newGame");
@@ -36,9 +29,9 @@ public class GameControlPanel extends JPanel implements ActionListener {
         loadGame.setActionCommand("loadGame");
         loadGame.addActionListener(this);
 
-        buttons.add(newGame);
-        buttons.add(loadGame);
-        buttons.add(save);
+        add(newGame);
+        add(loadGame);
+        add(save);
     }
 
     @Override
@@ -46,13 +39,9 @@ public class GameControlPanel extends JPanel implements ActionListener {
         switch (ae.getActionCommand()) {
             case "newGame": cont.newGame(); break;
             case "saveGame": cont.saveGame(); break;
-            case "loadGame": cont.loadGame();
+            case "loadGame": cont.loadGame(); break;
+            case "exitGame": System.exit(0);
         }
-    }
-
-    public void setLabelText(String text) {
-        label.setText(text);
-
     }
 
     public void setSaveEnabled(boolean b) {

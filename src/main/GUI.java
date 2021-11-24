@@ -20,6 +20,8 @@ public class GUI extends JFrame {
     private final PlayerOnTurnPanel potp;
     private final GameControlPanel gcp;
     static private HashMap<RoundState, String> stateToPanel;
+    private final JMenuItem saveGameMenu;
+    private final TextPanel tp;
 
     public GUI(Board b, SiamController c) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -67,13 +69,15 @@ public class GUI extends JFrame {
         PickActionPanel pap = new PickActionPanel(c);
         PickDestinationPanel pdp = new PickDestinationPanel(c);
         PickDirectionPanel pdirp = new PickDirectionPanel(c);
+        tp = new TextPanel();
 
         rightActions.add(pfp, pfp.getName());
         rightActions.add(pap, pap.getName());
         rightActions.add(pdp, pdp.getName());
         rightActions.add(pdirp, pdirp.getName());
+        rightActions.add(tp, tp.getName());
 
-        cl.show(rightActions, pfp.getName());
+        cl.show(rightActions, tp.getName());
 
         stateToPanel = new HashMap<>();
         stateToPanel.put(RoundState.PICK_FIGURINE, pfp.getName());
@@ -83,8 +87,35 @@ public class GUI extends JFrame {
 
         rightActions.setPreferredSize(new Dimension(640, 640));
 
+        //menu
+        JMenuItem newGameMenu = new JMenuItem("New Game");
+        newGameMenu.setActionCommand("newGame");
+        newGameMenu.addActionListener(gcp);
+
+        JMenuItem loadGameMenu = new JMenuItem("Load Game");
+        loadGameMenu.setActionCommand("loadGame");
+        loadGameMenu.addActionListener(gcp);
+
+        saveGameMenu = new JMenuItem("Save Game");
+        saveGameMenu.setActionCommand("saveGame");
+        saveGameMenu.addActionListener(gcp);
+        saveGameMenu.setEnabled(false);
+
+        JMenuItem exitGameMenu = new JMenuItem("Exit Game");
+        exitGameMenu.setActionCommand("exitGame");
+        exitGameMenu.addActionListener(gcp);
+
+        JMenu menu = new JMenu("Game");
+        menu.add(newGameMenu);
+        menu.add(loadGameMenu);
+        menu.add(saveGameMenu);
+        menu.add(exitGameMenu);
+
+        JMenuBar mb = new JMenuBar();
+        mb.add(menu);
+        setJMenuBar(mb);
+
         potp.setVisible(false);
-        rightActions.setVisible(false);
         board = b;
         cont = c;
         drawBoard();
@@ -150,21 +181,21 @@ public class GUI extends JFrame {
 
     public void gameStateSwitch(GameState gs, Player winner) {
         switch (gs) {
-            case NOT_STARTED:
-                gcp.setLabelText("");
             case STARTED:
                 potp.setVisible(true);
-                rightActions.setVisible(true);
                 gcp.setSaveEnabled(true);
+                saveGameMenu.setEnabled(true);
                 break;
             case GAME_OVER:
                 potp.setVisible(false);
-                rightActions.setVisible(false);
+                CardLayout cl = (CardLayout) rightActions.getLayout();
+                cl.show(rightActions, tp.getName());
                 switch (winner) {
-                    case ELEPHANT: gcp.setLabelText("Elephant is the winner!"); break;
-                    case RHINO: gcp.setLabelText("Rhino is the winner!");
+                    case ELEPHANT: tp.setLabelText("Elephant is the winner!"); break;
+                    case RHINO: tp.setLabelText("Rhino is the winner!");
                 }
                 gcp.setSaveEnabled(false);
+                saveGameMenu.setEnabled(false);
         }
     }
 

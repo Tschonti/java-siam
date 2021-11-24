@@ -2,13 +2,15 @@ package main;
 
 import cells.Cell;
 
-public class SiamController {
+import java.io.Serializable;
+
+public class SiamController implements Serializable {
     private GameState game_s;
     private RoundState round_s;
     private Player onTurn;
 
     private Board board;
-    private final GUI g;
+    private transient final GUI g;
 
     private Position source;
     private Position dest;
@@ -30,7 +32,6 @@ public class SiamController {
                 return;
             }
         }
-
         board = new Board();
         Cell.setBoard(board);
         g.setBoard(board);
@@ -79,6 +80,7 @@ public class SiamController {
                         board.moveToBench(source, onTurn);
                         stateChange(game_s, RoundState.first(), Player.swap(onTurn));
                     } else if (source.equals(p)) {
+                        g.toggleSupplyHighlight(onTurn, false, false);
                         movingDirection = null;
                         board.toggleMoveHighlights(source, false);
                         stateChange(game_s, RoundState.next(round_s), onTurn);
@@ -194,6 +196,8 @@ public class SiamController {
         round_s = rs;
         game_s = gs;
         onTurn = p;
-        g.roundStateSwitch(round_s, onTurn);
+        if (gs != GameState.GAME_OVER) {
+            g.roundStateSwitch(round_s, onTurn);
+        }
     }
 }
