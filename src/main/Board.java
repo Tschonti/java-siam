@@ -147,10 +147,12 @@ public class Board implements Serializable {
         boolean result = board[src.getY()][src.getX()].initiatePush(pushDir);
         if (result) {
             Position moving = new Position(src.getX() + pushDir.x, src.getY() + pushDir.y);
-            while (!Position.isInOuterCells(moving)) {
+            while (!Position.isOutOfBounds(moving)) {
                 moving.setX(moving.getX() + pushDir.x);
                 moving.setY(moving.getY() + pushDir.y);
             }
+            moving.setX(moving.getX() - pushDir.x);
+            moving.setY(moving.getY() - pushDir.y);
             Cell finisher = board[moving.getY()][moving.getX()];
             while (finisher.getDir() != pushDir) {
                 moving.setX(moving.getX() - pushDir.x);

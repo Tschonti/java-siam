@@ -22,7 +22,7 @@ public class Cell extends JPanel implements Serializable {
         pos = p;
         addMouseListener(new CellClickListener());
         setBackground(new Color(157, 157, 157));
-        setPreferredSize(new Dimension(128, 128));
+        setPreferredSize(new Dimension(120, 120));
     }
 
     public void setHighlightedForMove(boolean f) {

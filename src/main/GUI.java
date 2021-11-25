@@ -41,7 +41,7 @@ public class GUI extends JFrame {
         rhinoSupplyCont = new JPanel();
 
         boardCont.setLayout(new GridLayout(5, 5, 5, 5));
-        boardCont.setPreferredSize(new Dimension(680, 660));
+        boardCont.setPreferredSize(new Dimension(620, 660));
 
         elephantSupplyCont.setPreferredSize(new Dimension(680, 128));
         rhinoSupplyCont.setPreferredSize(new Dimension(680, 128));

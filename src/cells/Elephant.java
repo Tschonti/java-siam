@@ -4,11 +4,14 @@ import main.Direction;
 import main.Player;
 import main.Position;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
 public class Elephant extends Animal {
 
@@ -17,8 +20,12 @@ public class Elephant extends Animal {
         super(p, Direction.UP);
         addMouseListener(new ElephantClickListener());
         setBackground(new Color(62, 183, 68));
-        dirLabel = new JLabel("^");
-        add(dirLabel);
+
+        try {
+            image = ImageIO.read(new File("images/elephant.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setHighlightedForMove(boolean f) {}

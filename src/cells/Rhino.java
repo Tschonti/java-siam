@@ -4,19 +4,25 @@ import main.Direction;
 import main.Player;
 import main.Position;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
 public class Rhino extends Animal {
     public Rhino(Position p) {
         super(p, Direction.DOWN);
         addMouseListener(new RhinoClickListener());
         setBackground(new Color(208, 63, 63));
-        dirLabel = new JLabel("ˇ");
-        add(dirLabel);
+
+        try {
+            image = ImageIO.read(new File("images/rhino.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setHighlightedForMove(boolean f) {    }

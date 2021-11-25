@@ -22,6 +22,7 @@ public class SiamController implements Serializable {
         board = new Board();
         g = new GUI(board, this);
         board.setGUI(g);
+        Cell.setController(this);
     }
 
     public void newGame(Board b) {

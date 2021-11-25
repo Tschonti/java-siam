@@ -15,13 +15,21 @@ public class PickDirectionPanel extends JPanel implements ActionListener {
     public PickDirectionPanel(SiamController c) {
         cont = c;
         setName("pickDirection");
-        setLayout(new BorderLayout());
-        add(new JLabel("Pick the direction you want your animal to be facing!"));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(new JLabel("<html><h1>Pick the direction you want your animal to be facing!</h1></html>"));
 
-        JButton up = new JButton("^");
-        JButton right = new JButton(">");
-        JButton down = new JButton("ˇ");
-        JButton left = new JButton("<");
+        Icon upIcon = new ImageIcon("images/up.png");
+        JButton up = new JButton(upIcon);
+
+        Icon rightIcon = new ImageIcon("images/right.png");
+        JButton right = new JButton(rightIcon);
+
+        Icon downIcon = new ImageIcon("images/down.png");
+        JButton down = new JButton(downIcon);
+
+        Icon leftIcon = new ImageIcon("images/left.png");
+        JButton left = new JButton(leftIcon);
+
         JButton back = new JButton("Cancel");
 
         up.setActionCommand("up");
@@ -36,11 +44,16 @@ public class PickDirectionPanel extends JPanel implements ActionListener {
         left.addActionListener(this);
         back.addActionListener(this);
 
-        add(up, BorderLayout.NORTH);
-        add(right, BorderLayout.EAST);
-        add(down, BorderLayout.SOUTH);
-        add(left, BorderLayout.WEST);
-        add(back, BorderLayout.CENTER);
+        add(up);
+
+        JPanel sideButtons = new JPanel();
+        sideButtons.add(left);
+        sideButtons.add(right);
+
+        add(sideButtons);
+
+        add(down);
+        add(back);
 
         setFocusable(true);
         requestFocusInWindow();

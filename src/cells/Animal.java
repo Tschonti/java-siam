@@ -4,10 +4,12 @@ import main.Direction;
 import main.Position;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 
 public abstract class Animal extends Cell {
-    protected JLabel dirLabel;
+    protected BufferedImage image;
 
     public Animal(Position p, Direction d) {
         super(p);
@@ -17,15 +19,23 @@ public abstract class Animal extends Cell {
         }
         dir = d;
     }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        double rotation = 0;
+        switch (dir) {
+            case UP: rotation = Math.PI; break;
+            case RIGHT: rotation = Math.PI/2; break;
+            case LEFT: rotation = -Math.PI/2;
+        }
+        g2.rotate(rotation, image.getWidth() / 2, image.getHeight() / 2);
+        g2.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight(), null);
+    }
+
 
     public void setDir(Direction d) {
         dir = d;
-        switch (d) {
-            case UP: dirLabel.setText("^"); break;
-            case RIGHT: dirLabel.setText(">"); break;
-            case LEFT: dirLabel.setText("<"); break;
-            case DOWN: dirLabel.setText("ˇ");
-        }
     }
 
     public Integer getStrengthForPush(Direction d) {
