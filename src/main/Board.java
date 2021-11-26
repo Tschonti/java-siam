@@ -136,8 +136,7 @@ public class Board implements Serializable {
                 return sum;
             }
             sum += str;
-            moving.setX(moving.getX() + pushDir.x);
-            moving.setY(moving.getY() + pushDir.y);
+            moving.move(pushDir);
         }
         return sum;
     }
@@ -148,26 +147,30 @@ public class Board implements Serializable {
         if (result) {
             Position moving = new Position(src.getX() + pushDir.x, src.getY() + pushDir.y);
             while (!Position.isOutOfBounds(moving)) {
-                moving.setX(moving.getX() + pushDir.x);
-                moving.setY(moving.getY() + pushDir.y);
+                moving.move(pushDir);
             }
-            moving.setX(moving.getX() - pushDir.x);
-            moving.setY(moving.getY() - pushDir.y);
+            moving.moveBack(pushDir);
             Cell finisher = board[moving.getY()][moving.getX()];
             while (finisher.getDir() != pushDir) {
-                moving.setX(moving.getX() - pushDir.x);
-                moving.setY(moving.getY() - pushDir.y);
+                moving.moveBack(pushDir);
                 finisher = board[moving.getY()][moving.getX()];
             }
             finisher.finisherCell();
         }
     }
 
-    public void reAddCellListeners() {
+    public void reload() {
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 board[y][x].reAddListeners();
+                board[y][x].addImage();
             }
+        }
+        for (Elephant elephant : elephantSupply) {
+            elephant.addImage();
+        }
+        for (Rhino rhino : rhinoSupply) {
+            rhino.addImage();
         }
     }
 

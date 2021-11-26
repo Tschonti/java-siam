@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Stone extends Cell {
-    private BufferedImage image;
+    transient private BufferedImage image;
 
     public Stone(Position p) {
         super(p);
@@ -21,12 +21,7 @@ public class Stone extends Cell {
             removeMouseListener(m);
         }
         setBackground(new Color(105, 105, 105));
-
-        try {
-            image = ImageIO.read(new File("images/stone.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        addImage();
     }
 
     @Override
@@ -45,6 +40,14 @@ public class Stone extends Cell {
         boolean result =  b.getCell(next).initiatePush(d);
         b.moveOnBoard(pos, d, dir);
         return result;
+    }
+
+    public void addImage() {
+        try {
+            image = ImageIO.read(new File("images/stone.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setHighlightedForMove(boolean f) {}

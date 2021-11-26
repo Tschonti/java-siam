@@ -17,29 +17,35 @@ public class Cell extends JPanel implements Serializable {
     protected Direction dir;
     static protected SiamController controller;
     static protected Board b;
+    protected static final Color defaultBackground = new Color(157, 157, 157);
+    private static final Color forMoveBackground = new Color(128, 145, 180);
+    protected Color activeBackground;
 
     public Cell(Position p) {
         pos = p;
+        activeBackground = new Color(68, 111, 173);
         addMouseListener(new CellClickListener());
-        setBackground(new Color(157, 157, 157));
+        setBackground(defaultBackground);
         setPreferredSize(new Dimension(120, 120));
     }
 
     public void setHighlightedForMove(boolean f) {
         if (f) {
-            setBackground(new Color(128, 145, 180));
+            setBackground(forMoveBackground);
         } else {
-            setBackground(new Color(157, 157, 157));
+            setBackground(defaultBackground);
         }
     }
 
     public void setHighlightedCenter(boolean f) {
         if (f) {
-            setBackground(new Color(68, 112, 203));
+            setBackground(activeBackground);
         } else {
-            setBackground(new Color(157, 157, 157));
+            setBackground(defaultBackground);
         }
     }
+
+    public void addImage() {}
 
     public void finisherCell() {
         System.out.println("itt valami nem jó");
@@ -59,6 +65,10 @@ public class Cell extends JPanel implements Serializable {
 
     public Position getPos() {
         return pos;
+    }
+
+    public static Color getForMoveBackground() {
+        return forMoveBackground;
     }
 
     public void setPos(Position pos) {

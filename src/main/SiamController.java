@@ -62,7 +62,7 @@ public class SiamController implements Serializable {
 
                 game_s = GameState.NOT_STARTED;
                 newGame(newCont.board);
-                board.reAddCellListeners();
+                board.reload();
 
                 source = newCont.source;
                 dest = newCont.dest;
@@ -89,9 +89,11 @@ public class SiamController implements Serializable {
                 ObjectOutputStream out =new ObjectOutputStream(f);
                 out.writeObject(this);
                 out.close();
+                g.successMessage("The game has been saved successfully!");
             }
             catch(IOException ex) {
                 g.errorMessage("There was a problem with saving, please try again!");
+                ex.printStackTrace();
             }
         }
     }
@@ -115,7 +117,7 @@ public class SiamController implements Serializable {
                         board.toggleCenterHighlights(source, false);
                         g.toggleSupplyHighlight(onTurn, false, false);
                         board.moveToBench(source, onTurn);
-                        stateChange(game_s, RoundState.first(), Player.swap(onTurn));
+                        stateChange(game_s, RoundState.first(), onTurn.swap());
                     } else if (source.equals(p)) {
                         g.toggleSupplyHighlight(onTurn, false, false);
                         movingDirection = null;
@@ -165,7 +167,7 @@ public class SiamController implements Serializable {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_ACTION) {
             board.toggleCenterHighlights(source, false);
             board.push(source);
-            stateChange(game_s, RoundState.first(), Player.swap(onTurn));
+            stateChange(game_s, RoundState.first(), onTurn.swap());
         }
     }
 
@@ -180,7 +182,7 @@ public class SiamController implements Serializable {
                 board.toggleCenterHighlights(dest, false);
                 board.moveOnBoard(source, movingDirection, d);
             }
-            stateChange(game_s, RoundState.first(), Player.swap(onTurn));
+            stateChange(game_s, RoundState.first(), onTurn.swap());
         }
     }
 

@@ -5,33 +5,24 @@ import main.Player;
 import main.Position;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 
 public class Rhino extends Animal {
     public Rhino(Position p) {
         super(p, Direction.DOWN);
+        activeBackground = Player.RHINO.activeColor;
         addMouseListener(new RhinoClickListener());
-        setBackground(new Color(208, 63, 63));
-
-        try {
-            image = ImageIO.read(new File("images/rhino.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        addImage();
     }
 
-    public void setHighlightedForMove(boolean f) {    }
-
-    public void setHighlightedCenter(boolean f) {
-        if (f) {
-            setBackground(new Color(112, 5, 5));
-        } else {
-            setBackground(new Color(208, 63, 63));
+    public void addImage() {
+        try {
+            image = ImageIO.read(Player.RHINO.image);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

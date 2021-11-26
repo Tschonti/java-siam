@@ -31,6 +31,16 @@ public class Position implements Serializable {
         return x == p.x && y == p.y;
     }
 
+    public void move(Direction d) {
+        x += d.x;
+        y += d.y;
+    }
+
+    public void moveBack(Direction d) {
+        x -= d.x;
+        y -= d.y;
+    }
+
     public static Direction whichWayToStep(Position src, Position dest) {
         int dx = dest.x - src.x;
         int dy = dest.y - src.y;

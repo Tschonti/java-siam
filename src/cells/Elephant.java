@@ -5,36 +5,25 @@ import main.Player;
 import main.Position;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 
 public class Elephant extends Animal {
 
-
     public Elephant(Position p) {
         super(p, Direction.UP);
+        activeBackground = Player.ELEPHANT.activeColor;
         addMouseListener(new ElephantClickListener());
-        setBackground(new Color(62, 183, 68));
-
-        try {
-            image = ImageIO.read(new File("images/elephant.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        addImage();
     }
 
-    public void setHighlightedForMove(boolean f) {}
-
-    public void setHighlightedCenter(boolean f) {
-        if (f) {
-            setBackground(new Color(35, 117, 14));
-        } else {
-            setBackground(new Color(62, 183, 68));
+    public void addImage() {
+        try {
+            image = ImageIO.read(Player.ELEPHANT.image);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

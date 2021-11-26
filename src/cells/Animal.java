@@ -3,13 +3,12 @@ package cells;
 import main.Direction;
 import main.Position;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 public abstract class Animal extends Cell {
-    protected BufferedImage image;
+    transient protected BufferedImage image;
 
     public Animal(Position p, Direction d) {
         super(p);
@@ -19,6 +18,9 @@ public abstract class Animal extends Cell {
         }
         dir = d;
     }
+
+    public void setHighlightedForMove(boolean f) {}
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -26,11 +28,18 @@ public abstract class Animal extends Cell {
         double rotation = 0;
         switch (dir) {
             case UP: rotation = Math.PI; break;
-            case RIGHT: rotation = Math.PI/2; break;
-            case LEFT: rotation = -Math.PI/2;
+            case RIGHT: rotation = -Math.PI/2; break;
+            case LEFT: rotation = Math.PI/2;
         }
-        g2.rotate(rotation, image.getWidth() / 2, image.getHeight() / 2);
-        g2.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight(), null);
+        if (image != null) {
+            g2.rotate(rotation, (double) image.getWidth() / 2, (double) image.getHeight() / 2);
+            switch (dir) {
+                case UP: g2.translate(120*Math.PI, 120*Math.PI); break;
+                case RIGHT: g2.translate(120*Math.PI, 0); break;
+                case LEFT: g2.translate(0, 120*Math.PI);
+            }
+            g2.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight(), null);
+        }
     }
 
 

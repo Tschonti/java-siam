@@ -1,5 +1,6 @@
 package main;
 
+import cells.Cell;
 import panels.*;
 
 import javax.swing.*;
@@ -12,17 +13,17 @@ import java.io.File;
 import java.util.HashMap;
 
 public class GUI extends JFrame {
-    private final JPanel boardCont;
-    private final JPanel elephantSupplyCont;
-    private final JPanel rhinoSupplyCont;
-    private final JPanel rightActions;
+    private final JPanel boardCont = new JPanel();
+    private final JPanel elephantSupplyCont = new JPanel();
+    private final JPanel rhinoSupplyCont = new JPanel();
+    private final JPanel rightActions = new JPanel();
     private Board board;
     private final SiamController cont;
-    private final PlayerOnTurnPanel potp;
+    private final PlayerOnTurnPanel potp = new PlayerOnTurnPanel();
     private final GameControlPanel gcp;
     static private HashMap<RoundState, String> stateToPanel;
-    private final JMenuItem saveGameMenu;
-    private final TextPanel tp;
+    private final JMenuItem saveGameMenu = new JMenuItem("Save Game");
+    private final TextPanel tp = new TextPanel();
 
     public GUI(Board b, SiamController c) {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -30,15 +31,31 @@ public class GUI extends JFrame {
         setSize(1280, 960);
         setResizable(false);
         setLayout(new BorderLayout(10, 0));
+        board = b;
+        cont = c;
 
         // left side
         JPanel left = new JPanel(new BorderLayout(0, 5));
-        left.setPreferredSize(new Dimension(680, 960));
         add(left, BorderLayout.WEST);
+        initializeLeftSide(left);
 
-        boardCont = new JPanel();
-        elephantSupplyCont = new JPanel();
-        rhinoSupplyCont = new JPanel();
+        //right side
+        JPanel right = new JPanel();
+        add(right, BorderLayout.EAST);
+        gcp = new GameControlPanel(cont);
+        initializeRightSide(right);
+
+        initializeMenu();
+
+        potp.setVisible(false);
+        drawBoard();
+        drawSupply(Player.ELEPHANT);
+        drawSupply(Player.RHINO);
+        setVisible(true);
+    }
+
+    public void initializeLeftSide(JPanel leftCont) {
+        leftCont.setPreferredSize(new Dimension(680, 960));
 
         boardCont.setLayout(new GridLayout(5, 5, 5, 5));
         boardCont.setPreferredSize(new Dimension(620, 660));
@@ -49,32 +66,27 @@ public class GUI extends JFrame {
         elephantSupplyCont.addMouseListener(new ElephantSupplyClickListener());
         rhinoSupplyCont.addMouseListener(new RhinoSupplyClickListener());
 
-        left.add(rhinoSupplyCont, BorderLayout.NORTH);
-        left.add(boardCont, BorderLayout.CENTER);
-        left.add(elephantSupplyCont, BorderLayout.SOUTH);
+        leftCont.add(rhinoSupplyCont, BorderLayout.NORTH);
+        leftCont.add(boardCont, BorderLayout.CENTER);
+        leftCont.add(elephantSupplyCont, BorderLayout.SOUTH);
+    }
 
-        //right side
-        JPanel right = new JPanel();
-        right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
-        right.setPreferredSize(new Dimension(590, 960));
-        add(right, BorderLayout.EAST);
+    public void initializeRightSide(JPanel rightCont) {
+        rightCont.setLayout(new BoxLayout(rightCont, BoxLayout.Y_AXIS));
+        rightCont.setPreferredSize(new Dimension(590, 960));
 
-        gcp = new GameControlPanel(c);
-        right.add(gcp);
+        rightCont.add(gcp);
 
         CardLayout cl = new CardLayout(20, 20);
-        rightActions = new JPanel();
         rightActions.setLayout(cl);
 
-        potp = new PlayerOnTurnPanel();
-        right.add(potp);
-        right.add(rightActions);
+        rightCont.add(potp);
+        rightCont.add(rightActions);
 
         PickFigurinePanel pfp = new PickFigurinePanel();
-        PickActionPanel pap = new PickActionPanel(c);
-        PickDestinationPanel pdp = new PickDestinationPanel(c);
-        PickDirectionPanel pdirp = new PickDirectionPanel(c);
-        tp = new TextPanel();
+        PickActionPanel pap = new PickActionPanel(cont);
+        PickDestinationPanel pdp = new PickDestinationPanel(cont);
+        PickDirectionPanel pdirp = new PickDirectionPanel(cont);
 
         rightActions.add(pfp, pfp.getName());
         rightActions.add(pap, pap.getName());
@@ -91,8 +103,9 @@ public class GUI extends JFrame {
         stateToPanel.put(RoundState.PICK_DIRECTION, pdirp.getName());
 
         rightActions.setPreferredSize(new Dimension(590, 640));
+    }
 
-        //menu
+    public void initializeMenu() {
         JMenuItem newGameMenu = new JMenuItem("New Game");
         newGameMenu.setActionCommand("newGame");
         newGameMenu.addActionListener(gcp);
@@ -101,7 +114,6 @@ public class GUI extends JFrame {
         loadGameMenu.setActionCommand("loadGame");
         loadGameMenu.addActionListener(gcp);
 
-        saveGameMenu = new JMenuItem("Save Game");
         saveGameMenu.setActionCommand("saveGame");
         saveGameMenu.addActionListener(gcp);
         saveGameMenu.setEnabled(false);
@@ -119,14 +131,6 @@ public class GUI extends JFrame {
         JMenuBar mb = new JMenuBar();
         mb.add(menu);
         setJMenuBar(mb);
-
-        potp.setVisible(false);
-        board = b;
-        cont = c;
-        drawBoard();
-        drawSupply(Player.ELEPHANT);
-        drawSupply(Player.RHINO);
-        setVisible(true);
     }
 
     public void setBoard(Board board) {
@@ -165,9 +169,9 @@ public class GUI extends JFrame {
     public void toggleSupplyHighlight(Player p, boolean highlight, boolean center) {
         Color c = UIManager.getColor ( "Panel.background" );
         if (highlight && center) {
-            c = new Color(68, 112, 203);
+            c = p.activeColor;
         } else if (highlight) {
-            c = new Color(128, 145, 180);
+            c = Cell.getForMoveBackground();
         }
         switch (p) {
             case RHINO:
@@ -206,6 +210,7 @@ public class GUI extends JFrame {
 
     public File showFileChooser(String buttonText) {
         JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         int val = chooser.showDialog(this, buttonText);
         if (val == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
@@ -225,6 +230,12 @@ public class GUI extends JFrame {
         JOptionPane opt = new JOptionPane(msg,
                 JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
         JDialog jd = opt.createDialog("Error");
+        jd.setVisible(true);
+    }
+
+    public void successMessage(String msg) {
+        JOptionPane opt = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
+        JDialog jd = opt.createDialog("Success");
         jd.setVisible(true);
     }
 
