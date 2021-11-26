@@ -40,6 +40,7 @@ public class Elephant extends Animal {
         }
         return result;
     }
+    public Player getPlayer() { return Player.ELEPHANT; }
 
     public void reAddListeners() {
         MouseListener[] ml = getMouseListeners();

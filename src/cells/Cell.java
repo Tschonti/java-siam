@@ -1,9 +1,6 @@
 package cells;
 
-import main.Board;
-import main.Direction;
-import main.Position;
-import main.SiamController;
+import main.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -97,6 +94,8 @@ public class Cell extends JPanel implements Serializable {
     public Integer getStrengthForPush(Direction d) {
         return null;
     }
+
+    public Player getPlayer() { return null; }
 
     public void reAddListeners() {
         MouseListener[] ml = getMouseListeners();

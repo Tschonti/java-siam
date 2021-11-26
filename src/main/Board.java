@@ -50,7 +50,9 @@ public class Board implements Serializable {
         }
         board[dest.getY()][dest.getX()].setDir(facingDir);
 
-        g.drawBoard();
+        if (g != null) {
+            g.drawBoard();
+        }
     }
 
     public void moveToBench(Position source, Player bench) {
@@ -66,8 +68,11 @@ public class Board implements Serializable {
                 board[source.getY()][source.getX()].setDir(Direction.UP);
         }
         board[source.getY()][source.getX()] = new Cell(source, true);
-        g.drawBoard();
-        g.drawSupply(bench);
+
+        if (g != null) {
+            g.drawBoard();
+            g.drawSupply(bench);
+        }
     }
 
     public boolean moveFromBench(Position dest, Player bench, Direction newDir) {
@@ -79,8 +84,11 @@ public class Board implements Serializable {
         board[dest.getY()][dest.getX()] = toMove;
         toMove.setPos(dest);
         toMove.setDir(newDir);
-        g.drawBoard();
-        g.drawSupply(bench);
+
+        if (g != null) {
+            g.drawBoard();
+            g.drawSupply(bench);
+        }
         return true;
     }
 

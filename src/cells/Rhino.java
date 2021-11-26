@@ -40,6 +40,8 @@ public class Rhino extends Animal {
         return result;
     }
 
+    public Player getPlayer() { return Player.RHINO; }
+
     public void reAddListeners() {
         MouseListener[] ml = getMouseListeners();
         for(MouseListener m : ml) {
