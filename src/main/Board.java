@@ -101,6 +101,7 @@ public class Board implements Serializable {
             }
         }
     }
+
     public void toggleCenterHighlights(Position src, boolean b) {
         board[src.getY()][src.getX()].setHighlightedCenter(b);
     }
@@ -144,21 +145,7 @@ public class Board implements Serializable {
     }
 
     public void push(Position src) {
-        Direction pushDir = board[src.getY()][src.getX()].getDir();
-        boolean result = board[src.getY()][src.getX()].initiatePush(pushDir);
-        if (result) {
-            Position moving = new Position(src.getX() + pushDir.x, src.getY() + pushDir.y);
-            while (!Position.isOutOfBounds(moving)) {
-                moving.move(pushDir);
-            }
-            moving.moveBack(pushDir);
-            Cell finisher = board[moving.getY()][moving.getX()];
-            while (finisher.getDir() != pushDir) {
-                moving.moveBack(pushDir);
-                finisher = board[moving.getY()][moving.getX()];
-            }
-            finisher.finisherCell();
-        }
+        board[src.getY()][src.getX()].initiatePush(board[src.getY()][src.getX()].getDir());
     }
 
     public void reload() {

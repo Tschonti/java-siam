@@ -62,10 +62,6 @@ public class Cell extends JPanel implements Serializable {
 
     public void addImage() {}
 
-    public void finisherCell() {
-        System.out.println("itt valami nem jó");
-    }
-
     public boolean initiatePush(Direction d) {
         return false;
     }

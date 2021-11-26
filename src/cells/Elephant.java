@@ -35,11 +35,10 @@ public class Elephant extends Animal {
         }
         boolean result =  b.getCell(next).initiatePush(d);
         b.moveOnBoard(pos, d, dir);
+        if (result && d == dir) {
+            controller.gameOver(Player.ELEPHANT);
+        }
         return result;
-    }
-
-    public void finisherCell() {
-        controller.gameOver(Player.ELEPHANT);
     }
 
     public void reAddListeners() {

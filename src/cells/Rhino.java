@@ -34,11 +34,10 @@ public class Rhino extends Animal {
         }
         boolean result =  b.getCell(next).initiatePush(d);
         b.moveOnBoard(pos, d, dir);
+        if (result && d == dir) {
+            controller.gameOver(Player.RHINO);
+        }
         return result;
-    }
-
-    public void finisherCell() {
-        controller.gameOver(Player.RHINO);
     }
 
     public void reAddListeners() {
