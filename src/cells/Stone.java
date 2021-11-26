@@ -15,7 +15,7 @@ public class Stone extends Cell {
     transient private BufferedImage image;
 
     public Stone(Position p) {
-        super(p);
+        super(p, true);
         MouseListener[] ml = getMouseListeners();
         for(MouseListener m : ml) {
             removeMouseListener(m);

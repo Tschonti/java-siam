@@ -21,12 +21,17 @@ public class Cell extends JPanel implements Serializable {
     private static final Color forMoveBackground = new Color(128, 145, 180);
     protected Color activeBackground;
 
-    public Cell(Position p) {
+    public Cell(Position p, boolean b) {
         pos = p;
         activeBackground = new Color(68, 111, 173);
         addMouseListener(new CellClickListener());
-        setBackground(defaultBackground);
+        if (b) {
+            setBackground(defaultBackground);
+        } else {
+            setOpaque(false);
+        }
         setPreferredSize(new Dimension(120, 120));
+        setMaximumSize(new Dimension(120, 120));
     }
 
     public void setHighlightedForMove(boolean f) {
@@ -42,6 +47,16 @@ public class Cell extends JPanel implements Serializable {
             setBackground(activeBackground);
         } else {
             setBackground(defaultBackground);
+        }
+    }
+
+    public void toggleBackground(boolean b) {
+        if (b) {
+            setBackground(defaultBackground);
+            setOpaque(true);
+        } else {
+            setBackground(UIManager.getColor ( "Panel.background" ));
+            setOpaque(false);
         }
     }
 
@@ -98,6 +113,7 @@ public class Cell extends JPanel implements Serializable {
     public class CellClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
+            System.out.println(pos.getY()  + " " + pos.getX() + " " + getWidth()+ " " +getHeight());
             controller.clickedOnCell(pos);
         }
     }

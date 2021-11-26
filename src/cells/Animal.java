@@ -11,7 +11,7 @@ public abstract class Animal extends Cell {
     transient protected BufferedImage image;
 
     public Animal(Position p, Direction d) {
-        super(p);
+        super(p, false);
         MouseListener[] ml = getMouseListeners();
         for(MouseListener m : ml) {
             removeMouseListener(m);
@@ -34,11 +34,11 @@ public abstract class Animal extends Cell {
         if (image != null) {
             g2.rotate(rotation, (double) image.getWidth() / 2, (double) image.getHeight() / 2);
             switch (dir) {
-                case UP: g2.translate(120*Math.PI, 120*Math.PI); break;
-                case RIGHT: g2.translate(120*Math.PI, 0); break;
-                case LEFT: g2.translate(0, 120*Math.PI);
+                case UP: g2.translate(getWidth()*Math.PI, getHeight()*Math.PI); break;
+                case RIGHT: g2.translate(getWidth()*Math.PI, 0); break;
+                case LEFT: g2.translate(0, getHeight()*Math.PI);
             }
-            g2.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight(), null);
+            g2.drawImage(image, 5, 5, getWidth() - 5, getHeight() - 5, 0, 0, image.getWidth(), image.getHeight(), null);
         }
     }
 

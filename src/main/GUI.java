@@ -5,8 +5,6 @@ import panels.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -30,12 +28,12 @@ public class GUI extends JFrame {
         setTitle("Siam");
         setSize(1280, 960);
         setResizable(false);
-        setLayout(new BorderLayout(10, 0));
+        setLayout(new BorderLayout());
         board = b;
         cont = c;
 
         // left side
-        JPanel left = new JPanel(new BorderLayout(0, 5));
+        JPanel left = new JPanel(new BorderLayout(0, 8));
         add(left, BorderLayout.WEST);
         initializeLeftSide(left);
 
@@ -55,13 +53,13 @@ public class GUI extends JFrame {
     }
 
     public void initializeLeftSide(JPanel leftCont) {
-        leftCont.setPreferredSize(new Dimension(680, 960));
+        leftCont.setPreferredSize(new Dimension(630, 960));
 
         boardCont.setLayout(new GridLayout(5, 5, 5, 5));
-        boardCont.setPreferredSize(new Dimension(620, 660));
+        boardCont.setMaximumSize(new Dimension(620, 620));
 
-        elephantSupplyCont.setPreferredSize(new Dimension(680, 128));
-        rhinoSupplyCont.setPreferredSize(new Dimension(680, 128));
+        elephantSupplyCont.setPreferredSize(new Dimension(620, 130));
+        rhinoSupplyCont.setPreferredSize(new Dimension(620, 130));
 
         elephantSupplyCont.addMouseListener(new ElephantSupplyClickListener());
         rhinoSupplyCont.addMouseListener(new RhinoSupplyClickListener());

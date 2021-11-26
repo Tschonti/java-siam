@@ -20,7 +20,7 @@ public class Board implements Serializable {
                 if (y == 2 && x > 0 && x < 4) {
                     board[y][x] = new Stone(new Position(x, y));
                 } else {
-                    board[y][x] = new Cell(new Position(x, y));
+                    board[y][x] = new Cell(new Position(x, y), true);
                 }
             }
         }
@@ -55,6 +55,7 @@ public class Board implements Serializable {
 
     public void moveToBench(Position source, Player bench) {
         board[source.getY()][source.getX()].setPos(new Position(-1, -1));
+        board[source.getY()][source.getX()].toggleBackground(false);
         switch (bench) {
             case RHINO:
                 rhinoSupply.add((Rhino) board[source.getY()][source.getX()]);
@@ -64,7 +65,7 @@ public class Board implements Serializable {
                 elephantSupply.add((Elephant) board[source.getY()][source.getX()]);
                 board[source.getY()][source.getX()].setDir(Direction.UP);
         }
-        board[source.getY()][source.getX()] = new Cell(source);
+        board[source.getY()][source.getX()] = new Cell(source, true);
         g.drawBoard();
         g.drawSupply(bench);
     }
@@ -74,6 +75,7 @@ public class Board implements Serializable {
             return false;
         }
         Animal toMove = bench == Player.ELEPHANT ? elephantSupply.remove(0) : rhinoSupply.remove(0);
+        toMove.toggleBackground(true);
         board[dest.getY()][dest.getX()] = toMove;
         toMove.setPos(dest);
         toMove.setDir(newDir);
@@ -83,7 +85,7 @@ public class Board implements Serializable {
     }
 
     public void removeFromBoard(Position p) {
-        board[p.getY()][p.getX()] = new Cell(p);
+        board[p.getY()][p.getX()] = new Cell(p, true);
     }
 
     public void toggleMoveHighlights(Position src, boolean b) {
