@@ -4,6 +4,7 @@ import main.RoundState;
 import main.SiamController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,18 +14,23 @@ public class PickDestinationPanel extends PanelWithText implements ActionListene
     public PickDestinationPanel(SiamController c) {
         cont = c;
         setName("pickDestination");
-        title.setText("Pick where you want to move your animal!");
+        title.setText(titlePrefix + "Pick where you want to move your animal!" + titlePostfix);
 
-        JButton backButton = new JButton("Cancel");
+        JButton backButton = new JButton("Cancel action choice");
         backButton.setFont(smallFont);
         backButton.setActionCommand("cancel");
         backButton.addActionListener(this);
+        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        ta.setText("You can move anywhere you want to xd");
+        ta.setText("If the chosen animal isn't on the board, you can put it in one of the outer cells." +
+                "If it's on the board, it can be moved to one of the free adjacent cells or off the table." +
+                "You can leave it in the same cell as well. After choosing the destination, you can rotate the animal.");
 
         add(title);
-        add(ta);
+        add(Box.createRigidArea(new Dimension(0,20)));
         add(backButton);
+        add(Box.createRigidArea(new Dimension(0,20)));
+        add(ta);
     }
 
     @Override

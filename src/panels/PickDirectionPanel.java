@@ -5,6 +5,7 @@ import main.RoundState;
 import main.SiamController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,8 +15,9 @@ public class PickDirectionPanel extends PanelWithText implements ActionListener 
     public PickDirectionPanel(SiamController c) {
         cont = c;
         setName("pickDirection");
-        title.setText("Pick the direction you want your animal to be facing!");
-        ta.setText("The animals can only push in the direction they're facing but they can move in any direction, so you should decide their direction based on your intentions to push in the upcoming rounds.");
+        title.setText(titlePrefix + "Pick the direction you want your animal to be facing!" + titlePostfix);
+        ta.setText("The animals can only push in the direction they're facing but they can move in any direction, " +
+                "so you should decide their direction based on your intentions to push in the upcoming rounds.");
 
         Icon upIcon = new ImageIcon("images/up.png");
         JButton up = new JButton(upIcon);
@@ -29,7 +31,7 @@ public class PickDirectionPanel extends PanelWithText implements ActionListener 
         Icon leftIcon = new ImageIcon("images/left.png");
         JButton left = new JButton(leftIcon);
 
-        JButton back = new JButton("Cancel");
+        JButton back = new JButton("Cancel destination choice");
 
         up.setActionCommand("up");
         right.setActionCommand("right");
@@ -45,21 +47,26 @@ public class PickDirectionPanel extends PanelWithText implements ActionListener 
         back.setFont(smallFont);
 
         add(title);
-        add(ta);
-
+        add(Box.createRigidArea(new Dimension(0,20)));
         add(up);
 
         JPanel sideButtons = new JPanel();
         sideButtons.add(left);
+
+        sideButtons.add(Box.createRigidArea(new Dimension(75,0)));
         sideButtons.add(right);
 
+        up.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sideButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
+        down.setAlignmentX(Component.CENTER_ALIGNMENT);
+        back.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         add(sideButtons);
-
         add(down);
+        add(Box.createRigidArea(new Dimension(0,20)));
         add(back);
-
-        setFocusable(true);
-        requestFocusInWindow();
+        add(Box.createRigidArea(new Dimension(0,20)));
+        add(ta);
     }
 
     @Override

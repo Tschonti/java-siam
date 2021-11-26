@@ -4,6 +4,7 @@ import main.RoundState;
 import main.SiamController;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -16,12 +17,12 @@ public class PickActionPanel extends TextPanel implements ActionListener, Compon
     public PickActionPanel(SiamController c) {
         cont = c;
         setName("pickAction");
-        title.setText("Pick which action you want to perform next!");
+        title.setText(titlePrefix + "Pick which action you want to perform next!" + titlePostfix);
         title.setFont(bigFont);
 
         JButton moveRotate = new JButton("Move and/or rotate");
         push = new JButton("Push");
-        JButton back = new JButton("Cancel");
+        JButton back = new JButton("Cancel animal choice");
 
         moveRotate.setFont(smallFont);
         push.setFont(smallFont);
@@ -40,11 +41,27 @@ public class PickActionPanel extends TextPanel implements ActionListener, Compon
         importantButtons.add(moveRotate);
         importantButtons.add(push);
 
-        add(title);
-        add(importantButtons);
-        add(back);
+        importantButtons.setAlignmentX(Component.CENTER_ALIGNMENT);
+        back.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        ta.setText("Pushing is when you fuck xdd");
+        add(title);
+        add(Box.createRigidArea(new Dimension(0,20)));
+        add(importantButtons);
+        add(Box.createRigidArea(new Dimension(0,5)));
+        add(back);
+        add(Box.createRigidArea(new Dimension(0,20)));
+
+        ta.setText("After choosing Move and/or Rotate, you can move the chosen animal. " +
+                "If it isn't on the board, you can put it in one of the outer cells. " +
+                "If it's on the board, it can be moved to one of the free adjacent cells or off the table. " +
+                "You can leave it in the same cell as well. After choosing the destination, you can rotate the animal. " +
+                "If you choose Push, your animal will push in the direction it's facing. " +
+                "If there's nothing there, it'll just move to the next cell. " +
+                "If there are other animals or rocks next to your animal, it'll push each of them by one cell, " +
+                "but only if it has the strength to do so. Every animal that will be affected by the push and " +
+                "is facing in the direction of the push adds one to the strength of the push, while every animal " +
+                "facing opposite and every rock subtracts one. Animals facing sideways add nothing. " +
+                "If the overall strength of the push is at least zero, the animals can handle the push.");
         add(ta);
     }
 

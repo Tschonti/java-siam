@@ -29,6 +29,7 @@ public class GUI extends JFrame {
         setSize(1280, 960);
         setResizable(false);
         setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
         board = b;
         cont = c;
 
