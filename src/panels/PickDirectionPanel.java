@@ -5,18 +5,17 @@ import main.RoundState;
 import main.SiamController;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PickDirectionPanel extends JPanel implements ActionListener {
+public class PickDirectionPanel extends PanelWithText implements ActionListener {
     private final SiamController cont;
 
     public PickDirectionPanel(SiamController c) {
         cont = c;
         setName("pickDirection");
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JLabel("<html><h1>Pick the direction you want your animal to be facing!</h1></html>"));
+        title.setText("Pick the direction you want your animal to be facing!");
+        ta.setText("The animals can only push in the direction they're facing but they can move in any direction, so you should decide their direction based on your intentions to push in the upcoming rounds.");
 
         Icon upIcon = new ImageIcon("images/up.png");
         JButton up = new JButton(upIcon);
@@ -43,6 +42,10 @@ public class PickDirectionPanel extends JPanel implements ActionListener {
         down.addActionListener(this);
         left.addActionListener(this);
         back.addActionListener(this);
+        back.setFont(smallFont);
+
+        add(title);
+        add(ta);
 
         add(up);
 

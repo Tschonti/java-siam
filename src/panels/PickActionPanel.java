@@ -9,19 +9,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class PickActionPanel extends JPanel implements ActionListener, ComponentListener {
+public class PickActionPanel extends TextPanel implements ActionListener, ComponentListener {
     private final SiamController cont;
     JButton push;
 
     public PickActionPanel(SiamController c) {
         cont = c;
         setName("pickAction");
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JLabel("<html><h1>Pick which action you want to perform next!</h1></html>"));
+        title.setText("Pick which action you want to perform next!");
+        title.setFont(bigFont);
 
         JButton moveRotate = new JButton("Move and/or rotate");
         push = new JButton("Push");
         JButton back = new JButton("Cancel");
+
+        moveRotate.setFont(smallFont);
+        push.setFont(smallFont);
+        back.setFont(smallFont);
 
         moveRotate.setActionCommand("moveRotate");
         push.setActionCommand("push");
@@ -36,8 +40,12 @@ public class PickActionPanel extends JPanel implements ActionListener, Component
         importantButtons.add(moveRotate);
         importantButtons.add(push);
 
+        add(title);
         add(importantButtons);
         add(back);
+
+        ta.setText("Pushing is when you fuck xdd");
+        add(ta);
     }
 
     @Override
