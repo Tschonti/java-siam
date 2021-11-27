@@ -4,6 +4,11 @@ import cells.Cell;
 
 import java.io.*;
 
+/**
+ * A játék kontrollere. Számon tartja az aktuális játék és kör állapotát,
+ * a cellák és gombok kattintás-értesítései alapján meghívja a tábla és a GUI megfelelő függvényeit.
+ * Ilyen objektum szerializálódik mentéskor.
+ */
 public class SiamController implements Serializable {
     private GameState game_s;
     private RoundState round_s;
@@ -25,6 +30,13 @@ public class SiamController implements Serializable {
         Cell.setController(this);
     }
 
+    /**
+     * Új játék kezdése. Ha egy játék jelenleg aktív,
+     * akkor megkérdezi a felhasználót, hogy biztosan új játékot akar-e kezdeni.
+     * Ha igen, akkor új táblát készít, beállítja a cellák statikus mezőit,
+     * kirajzoltatja a táblát és a cserepadokat a GUI-val, valamint beállítja a kezdőállapotokat.
+     * @param b Az új tábla, amit használni fog a játék. Lehet null, ekkor teljesen új tábla jön létre.
+     */
     public void newGame(Board b) {
         if (game_s == GameState.STARTED) {
             if (!g.confirmNewGame()) {
@@ -45,6 +57,12 @@ public class SiamController implements Serializable {
         g.toggleSupplyHighlight(Player.RHINO, false, true);
     }
 
+    /**
+     * Egy FileChooser-t mutat a felhasználónak, hogy válassza ki a betölteni kívánt játékot.
+     * Ha a visszakapott fájl létezik, akkor megpróbálja deszerializálni a fájlt. Ha nem sikerül, hibaüzenetet dob.
+     * Ha egy játék jelenleg aktív, akkor megkérdezi a felhasználót, hogy biztosan el akarja-e dobni azt.
+     * Ha igen, akkor a newGame() függvénnyel inicializálja a betöltött játékot és minden szükséges változót átmásol ebbe az objektumba.
+     */
     public void loadGame() {
         File file = g.showFileChooser("Load");
         if (file != null) {
@@ -81,6 +99,11 @@ public class SiamController implements Serializable {
         }
     }
 
+    /**
+     * Egy FileChooser-t mutat a felhasználónak, hogy válassza ki a mentés helyét és a fájl nevét.
+     * Ide szerializálja önmagát. Ha valami hiba lép fel, hibaüzenetet dob.
+     * Ha sikerült, értesíti a felhasználót.
+     */
     public void saveGame() {
         File file = g.showFileChooser("Save");
         if (file != null) {
@@ -98,6 +121,15 @@ public class SiamController implements Serializable {
         }
     }
 
+    /**
+     * Animal-ből származó objektumok vagy a cserepadok ezzel a fügvénnyel értesítik a controllert, hogy rájuk kattintottak.
+     * Ha a játék nem kezdődött el vagy már végetért, akkor nem történik semmi.
+     * Ha PICK_FIGURINE állapotban vagyunk, akkor a kattintott állat lesz a kiválasztott állat (ha a körön lévő játékosé). Következő állapot: PICK_ACTION
+     * Ha PICK_DESTINATION állapotban vagyunk és a cserepadra kattintott, akkor a kiválasztott állatot a cserepadra rakjuk. Következő állapot: PICK_FIGURINE és körön lévő játékos váltás!
+     * Ha PICK_DESTINATION állapotban vagyunk és akiválasztott állatra kattintott, akkor a felhasználó helyben akar maradni az állattal. Következő állapot: PICK_DIRECTION
+     * @param p Annak az állatnak a pozíciója, akire kattintottak.
+     * @param pl Állat típusa
+     */
     public void clickedOnAnimal(Position p, Player pl) {
         if (game_s == GameState.STARTED && onTurn == pl) {
             switch (round_s) {
@@ -109,7 +141,7 @@ public class SiamController implements Serializable {
                     } else {
                         g.toggleSupplyHighlight(onTurn, true, true);
                     }
-                    stateChange(game_s, RoundState.next(round_s), onTurn);
+                    stateChange(game_s, round_s.next(), onTurn);
                     break;
                 case PICK_DESTINATION:
                     if (p.equals(Position.bench()) && !source.equals(Position.bench())) {
@@ -122,13 +154,20 @@ public class SiamController implements Serializable {
                         g.toggleSupplyHighlight(onTurn, false, false);
                         movingDirection = null;
                         board.toggleMoveHighlights(source, false);
-                        stateChange(game_s, RoundState.next(round_s), onTurn);
+                        stateChange(game_s, round_s.next(), onTurn);
                     }
             }
         }
-        System.out.println((pl == Player.ELEPHANT ? "Elefánt" : "Orrszarvú") + " x: " + p.getX() + ", y: " + p.getY());
     }
 
+    /**
+     * Üres cellák ezzel a fügvénnyel értesítik a controllert, hogy rájuk kattintottak.
+     * Ha a játék nem kezdődött el vagy már végetért, akkor nem történik semmi.
+     * Ha nem PICK_DESTINATION állapotban vagyunk, akkor nem történik semmi.
+     * Ha a kiválasztott pozícióba nem léphet a kiválasztott állat, akkor nem történik semmi.
+     * Egyébként a cél elmentődik, és a következő állapot: PICK_DIRECTION
+     * @param p Annak a cellának a pozíciója, akire kattintottak.
+     */
     public void clickedOnCell(Position p) {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_DESTINATION) {
             if (source.equals(Position.bench())) {
@@ -146,11 +185,15 @@ public class SiamController implements Serializable {
             }
             dest = p;
             board.toggleCenterHighlights(dest, true);
-            stateChange(game_s, RoundState.next(round_s), onTurn);
+            stateChange(game_s, round_s.next(), onTurn);
         }
-        System.out.println("cell x: " + p.getX() + ", y: " + p.getY());
     }
 
+    /**
+     * PickActionPanel ezzel értesíti a controllert, hogy a felhasználó a mozgatás akciót választotta.
+     * Ha a játék elkezdődött és PICK_ACTION állapotban vagyunk, akkor PICK_DESTINATION állapotba lépünk,
+     * közben a lehetséges lépések celláit kiszinezzük.
+     */
     public void clickedOnMove() {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_ACTION) {
             if (source.equals(Position.bench())) {
@@ -159,18 +202,30 @@ public class SiamController implements Serializable {
                 board.toggleMoveHighlights(source, true);
                 g.toggleSupplyHighlight(onTurn, true, false);
             }
-            stateChange(game_s, RoundState.next(round_s), onTurn);
+            stateChange(game_s, round_s.next(), onTurn);
         }
     }
 
+    /**
+     * PickActionPanel ezzel értesíti a controllert, hogy a felhasználó a tolás akciót választotta.
+     * Ha a játék elkezdődött és PICK_ACTION állapotban vagyunk, akkor kezdeményezzük a tolást a táblán,
+     * és PICK_FIGURINE állapotba lépünk, valamint a másik játékos lesz soron.
+     */
     public void clickedOnPush() {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_ACTION) {
             board.toggleCenterHighlights(source, false);
-            board.push(source);
+            board.startPush(source);
             stateChange(game_s, RoundState.first(), onTurn.swap());
         }
     }
 
+    /**
+     * PickDirectionPanel ezzel értesíti a controllert, hogy a felhasználó melyik irányt választotta.
+     * Ha a játék elkezdődött és PICK_DIRECTION állapotban vagyunk, akkor a kiválasztott állatot a
+     * kiválasztott pozícióba mozgatjuk, majd d irányba forgatjuk a board megfelelő metódusaival.
+     * Végül PICK_FIGURINE állapotba lépünk, valamint a másik játékos lesz soron.
+     * @param d Az irány, amire a felhasználó kattintott
+     */
     public void clickedOnDirection(Direction d) {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_DIRECTION) {
             if (source.equals(Position.bench())) {
@@ -180,12 +235,18 @@ public class SiamController implements Serializable {
             } else {
                 board.toggleCenterHighlights(source, false);
                 board.toggleCenterHighlights(dest, false);
-                board.moveOnBoard(source, movingDirection, d);
+                board.moveOnBoardAndRotate(source, movingDirection, d);
             }
             stateChange(game_s, RoundState.first(), onTurn.swap());
         }
     }
 
+    /**
+     * A panelek ezzel a metódussal értesítik a controllert, hogy a felhasználó a Cancel gombra kattintott.
+     * Ha a jelen állapot megegyezik a panel-től kapott állapottal, akkor egy állapotot visszalépünk,
+     * és visszaállítjuk a háttérszíneket és változókat is ennek megfelelően.
+     * @param cancelFromState Az értesítő panelhez tartozó állapot
+     */
     public void clickedOnCancel(RoundState cancelFromState) {
         if (game_s == GameState.STARTED && round_s == cancelFromState) {
             switch (cancelFromState) {
@@ -216,10 +277,15 @@ public class SiamController implements Serializable {
                         g.toggleSupplyHighlight(onTurn, false, false);
                     }
             }
-            stateChange(game_s, RoundState.previous(round_s), onTurn);
+            stateChange(game_s, round_s.previous(), onTurn);
         }
     }
 
+    /**
+     * Egy állat objektum ezzel a metódussal értesíti a controllett, hogy ő tolt le egy sziklát és megnyerte a játékot.
+     * GAME_OVER állapotba lépünk.
+     * @param winner A győztes játékos
+     */
     public void gameOver(Player winner) {
         stateChange(GameState.GAME_OVER, round_s, winner);
     }
@@ -228,6 +294,12 @@ public class SiamController implements Serializable {
         return strength;
     }
 
+    /**
+     * Állapotváltozás
+     * @param gs az új GameState
+     * @param rs az új RoundState
+     * @param p az új játékos a soron
+     */
     private void stateChange( GameState gs, RoundState rs, Player p) {
         if (game_s != gs ) {
             g.gameStateSwitch(gs, p);
@@ -238,5 +310,9 @@ public class SiamController implements Serializable {
         if (gs != GameState.GAME_OVER) {
             g.roundStateSwitch(round_s, onTurn);
         }
+    }
+
+    public static void main(String[] args) {
+        new SiamController();
     }
 }

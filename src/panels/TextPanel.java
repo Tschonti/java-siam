@@ -1,5 +1,8 @@
 package panels;
 
+/**
+ * Az a panel, ami a játék elején összefoglalja a játékszabályokat.
+ */
 public class TextPanel extends PanelWithText {
     public TextPanel() {
         String text = "In this game, elephants and rhinos race to push one of the rocks off the board. " +

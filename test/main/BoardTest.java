@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * A Board osztály metódusainak tesztjei
+ */
 public class BoardTest {
     Board b;
 
@@ -14,6 +17,12 @@ public class BoardTest {
         b = new Board();
     }
 
+    /**
+     * Az Board osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy belső mezőbe ne engdjen lépni a cserepadról
+     * Ellenőrzi, hogy a cserepadról eltűnik az állat sikeres lépés után,
+     * és pozíciója frissül, valamint hogy felkerül a táblára
+     */
     @Test
     public void moveFromBench() {
         assertEquals(b.getSupplySize(Player.ELEPHANT), 5);
@@ -29,6 +38,10 @@ public class BoardTest {
         assertTrue(b.getCell(0, 0).getPos().equals(new Position(0, 0)));
     }
 
+    /**
+     * Az Board osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy felkerül a mozgatott állat a cserepadra, valamint hogy a tábláról eltűnik.
+     */
     @Test
     public void moveToBench() {
         b.moveFromBench(new Position(1, 0), Player.RHINO, Direction.RIGHT);
@@ -50,6 +63,13 @@ public class BoardTest {
         assertNull(b.getCell(4, 3).getPlayer());
     }
 
+    /**
+     * Az Board osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy mozgatás után a megflelő helyre került az állat,
+     * hogy pozíciója és iránya be lett állítva.
+     * Ellenőrzi, hogy az irány akkor is beállítódik, ha a mozgatás iránya null,
+     * és hogy a pozíció ilyenkor nem változik.
+     */
     @Test
     public void moveOnBoard() {
         Position p1 = new Position(1, 0);
@@ -58,7 +78,7 @@ public class BoardTest {
         b.moveFromBench(p1, Player.RHINO, Direction.RIGHT);
         b.moveFromBench(p2, Player.ELEPHANT, Direction.LEFT);
 
-        b.moveOnBoard(p1, Direction.RIGHT, Direction.DOWN);
+        b.moveOnBoardAndRotate(p1, Direction.RIGHT, Direction.DOWN);
 
         assertNull(b.getCell(p1).getPlayer());
         assertTrue(b.getCell(p1).getPos().equals(p1));
@@ -66,7 +86,7 @@ public class BoardTest {
         assertTrue(b.getCell(2, 0).getPos().equals(new Position(2, 0)));
         assertEquals(b.getCell(2, 0).getDir(), Direction.DOWN);
 
-        b.moveOnBoard(p2, null, Direction.UP);
+        b.moveOnBoardAndRotate(p2, null, Direction.UP);
 
         assertEquals(b.getCell(p2).getPlayer(), Player.ELEPHANT);
         assertTrue(b.getCell(p2).getPos().equals(p2));
@@ -74,6 +94,10 @@ public class BoardTest {
 
     }
 
+    /**
+     * Az Board osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy a mező a metódus után üres.
+     */
     @Test
     public void removeFromBoard() {
         Position p1 = new Position(0, 1);
@@ -90,6 +114,10 @@ public class BoardTest {
         assertNull(b.getCell(p2).getPlayer());
     }
 
+    /**
+     * Az Board osztály ugyanilyen nevű metódusának tesztje.
+     * Sok különböző szituációban ellenőrzi, hogy a metódus a várt eredmény adja.
+     */
     @Test
     public void calculateStrength() {
         assertEquals(b.calculateStrength(new Position(-1, -1)), -1);
@@ -100,7 +128,7 @@ public class BoardTest {
 
         Position p2 = new Position(1, 0);
         b.moveFromBench(p2, Player.RHINO, Direction.LEFT);
-        b.moveOnBoard(p2, Direction.DOWN, Direction.LEFT);
+        b.moveOnBoardAndRotate(p2, Direction.DOWN, Direction.LEFT);
         Position p2_2 = new Position(1, 1);
         assertEquals(b.calculateStrength(p2_2), 2);
 
@@ -109,7 +137,7 @@ public class BoardTest {
 
         Position p3 = new Position(0, 3);
         b.moveFromBench(p3, Player.ELEPHANT, Direction.UP);
-        b.moveOnBoard(p3, Direction.RIGHT, Direction.UP);
+        b.moveOnBoardAndRotate(p3, Direction.RIGHT, Direction.UP);
         Position p3_2 = new Position(1, 3);
         assertEquals(b.calculateStrength(p2_2), -1);
         assertEquals(b.calculateStrength(p3_2), -1);
@@ -119,18 +147,23 @@ public class BoardTest {
         assertEquals(b.calculateStrength(p3_2), 1);
     }
 
+    /**
+     * Az Board osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy az állat a megfelelő pozícióba kerül, akkor is,
+     * ha a semmit tolja, és akkor is, ha egy másik állatot.
+     */
     @Test
     public void push() {
         Cell.setBoard(b);
         Position p1 = new Position(0, 1);
         b.moveFromBench(p1, Player.RHINO, Direction.DOWN);
-        b.push(p1);
+        b.startPush(p1);
 
         assertNull(b.getCell(p1).getPlayer());
         assertEquals(b.getCell(0, 2).getPlayer(), Player.RHINO);
 
         b.moveFromBench(new Position(0, 3), Player.ELEPHANT, Direction.UP);
-        b.push(new Position(0, 3));
+        b.startPush(new Position(0, 3));
 
         assertNull(b.getCell(0, 3).getPlayer());
         assertEquals(b.getCell(0, 2).getPlayer(), Player.ELEPHANT);

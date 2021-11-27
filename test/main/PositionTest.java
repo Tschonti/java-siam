@@ -10,6 +10,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * A Position osztály metódusainak tesztjei paraméterekkel.
+ */
 @RunWith(Parameterized.class)
 public class PositionTest {
     Position source;
@@ -41,16 +44,28 @@ public class PositionTest {
         return params;
     }
 
+    /**
+     * Az Position osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy különböző forrás- és célpozíciókra a várt eredményt adja-e
+     */
     @Test
     public void whichWayToStep() {
         assertEquals(Position.whichWayToStep(source, destination), expectedDir);
     }
 
+    /**
+     * Az Position osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy különböző forrásokra a várt eredményt adja-e
+     */
     @Test
     public void isOutOfBounds() {
         assertEquals(Position.isOutOfBounds(source), outOfBounds);
     }
 
+    /**
+     * Az Position osztály ugyanilyen nevű metódusának tesztje.
+     * Ellenőrzi, hogy különböző forrásokra a várt eredményt adja-e
+     */
     @Test
     public void isInOuterCells() {
         assertEquals(Position.isInOuterCells(source), outer);

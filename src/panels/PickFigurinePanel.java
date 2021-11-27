@@ -3,6 +3,9 @@ package panels;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Az a panel, ami elmagyarázza a felhasználónak, hogy melyik állatát választhatja.
+ */
 public class PickFigurinePanel extends PanelWithText {
     public PickFigurinePanel() {
         ta.setText("You can choose any of your animals, on or off the board.");

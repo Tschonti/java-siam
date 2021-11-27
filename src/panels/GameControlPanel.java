@@ -7,6 +7,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * A jobb oldalon tetjén látható három gombért felelős panel.
+ * Értesíti a controllert, ha a felhasználó űj játékot akar kezdeni, vgay menteni vagy betölteni akarja azt.
+ * A menüsor is ezen osztály objektumát használja ActionListenerként.
+ */
 public class GameControlPanel extends PanelWithText implements ActionListener {
     private final SiamController cont;
     JButton save;
@@ -47,6 +52,10 @@ public class GameControlPanel extends PanelWithText implements ActionListener {
         }
     }
 
+    /**
+     * Engedélyezi vagy letiltja a játék mentése gombot.
+     * @param b igaz, ha engedélyezés
+     */
     public void setSaveEnabled(boolean b) {
         save.setEnabled(b);
     }

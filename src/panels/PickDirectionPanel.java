@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Az a panel, ahol a felhasználó kiválaszthatja, hogy melyik irányba nézzen a kiválasztott állata.
+ * Értesíti a controllert, hogy melyiket választotta.
+ */
 public class PickDirectionPanel extends PanelWithText implements ActionListener {
     private final SiamController cont;
 

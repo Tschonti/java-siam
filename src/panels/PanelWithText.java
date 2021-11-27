@@ -3,6 +3,11 @@ package panels;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Absztrakt osztály, ami a jobboldali panelek ősosztálya.
+ * Itt tárolódnak az egységes betűtípusok,
+ * valamint itt inicializálódik a cím és a textArea, ami majdnem minden panel-en megjelenik.
+ */
 abstract public class PanelWithText extends JPanel {
     protected final JTextArea ta = new JTextArea();
     protected final JLabel title = new JLabel();

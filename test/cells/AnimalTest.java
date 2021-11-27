@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Az Animal osztályhoz tartozó tesztek
+ */
 public class AnimalTest {
     Animal a1;
     Animal a2;
@@ -17,6 +20,10 @@ public class AnimalTest {
         a2 = new Rhino(new Position(3, 4));
     }
 
+    /**
+     * Az Animal osztály ugyanilyen nevű metódusának tesztje.
+     * Különböző szituációkban teszteli, hogy a várt éréket adja-e a függvény.
+     */
     @Test
     public void getStrengthForPush() {
         assertEquals(a1.getDir(), Direction.UP);

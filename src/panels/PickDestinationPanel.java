@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Az a panel, ami elmagyarázza a felhasználónak, hogy melyik mezőt választhatja a mozgatás céljának.
+ */
 public class PickDestinationPanel extends PanelWithText implements ActionListener {
     private final SiamController cont;
 

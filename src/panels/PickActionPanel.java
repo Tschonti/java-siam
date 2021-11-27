@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
+/**
+ * Az a panel, ahol a felhasználó kiválaszthatja, hogy melyik akciót szeretné végrehajtani a kiválasztott állatán.
+ * Értesíti a controllert, hogy melyiket választotta.
+ */
 public class PickActionPanel extends TextPanel implements ActionListener, ComponentListener {
     private final SiamController cont;
     JButton push;
@@ -82,6 +86,11 @@ public class PickActionPanel extends TextPanel implements ActionListener, Compon
     @Override
     public void componentMoved(ComponentEvent e) {}
 
+    /**
+     * Amikor megjelenik a panel, lekéri a controllertől, hogy a jelenleg kiválasztott állatnak a tolás milyen erősségű.
+     * Ha legalább nulla, akkor engedélyezi a tolás gombot, egyébként letiltja
+     * @param e ComponentEvent objektum
+     */
     @Override
     public void componentShown(ComponentEvent e) {
         push.setEnabled(cont.getStrength() >= 0);

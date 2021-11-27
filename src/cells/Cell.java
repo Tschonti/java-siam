@@ -9,6 +9,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.Serializable;
 
+/**
+ * A tábla egy üres celláját reprezentáló osztály.
+ * JPanel-ből származik, ezért ezek az objktumok kerülnek a táblára.
+ * Saját hátterét állítja, és értesíti a controllert, ha rákattintanak.
+ */
 public class Cell extends JPanel implements Serializable {
     protected Position pos;
     protected Direction dir;
@@ -31,6 +36,10 @@ public class Cell extends JPanel implements Serializable {
         setMaximumSize(new Dimension(120, 120));
     }
 
+    /**
+     * Lehetséges lépést jelző háttérszín be- vagy kikapcsolása.
+     * @param f igaz, ha bekapcsolás
+     */
     public void setHighlightedForMove(boolean f) {
         if (f) {
             setBackground(forMoveBackground);
@@ -39,6 +48,10 @@ public class Cell extends JPanel implements Serializable {
         }
     }
 
+    /**
+     * Kiválasztott mezőt jelző háttérszínbe- vagy kikapcsolása.
+    * @param f igaz, ha bekapcsolás
+     */
     public void setHighlightedCenter(boolean f) {
         if (f) {
             setBackground(activeBackground);
@@ -47,6 +60,10 @@ public class Cell extends JPanel implements Serializable {
         }
     }
 
+    /**
+     * Háttérszín be- vagy kikapcsolása (kikapcsolásnál átlátszó lesz)
+     * @param b igaz, ha bekapcsolás
+     */
     public void toggleBackground(boolean b) {
         if (b) {
             setBackground(defaultBackground);
@@ -57,9 +74,20 @@ public class Cell extends JPanel implements Serializable {
         }
     }
 
-    public void addImage() {}
+    /**
+     * Kép hozzáadása a cellához. Mivel az üres cellákon nincs kép, itt üres metódus.
+     */
+    public void setImage() {}
 
-    public boolean initiatePush(Direction d) {
+    /**
+     * Ennek a metódusnak a meghívása azt jelenti, hogy ezt a cellát tolják.
+     * Üres cella esetében a válasz egy automatikus false,
+     * azaz ennél a cellánál nem terjedhet tovább a tolás (ezért return),
+     * és nem esett le szikla a tábláról (ezért false).
+     * @param d A tolás iránya
+     * @return igaz, ha leesett egy szikla, azaz vége a játéknak
+     */
+    public boolean push(Direction d) {
         return false;
     }
 
@@ -91,12 +119,27 @@ public class Cell extends JPanel implements Serializable {
         b = board;
     }
 
+    /**
+     * Visszaadja, hogy az adott irányú tolásba mennyi erőt ad az adott cella.
+     * @param d a tolás iránya
+     * @return null, ami egyben azt is jelenti, hogy itt végetér a tolás
+     */
     public Integer getStrengthForPush(Direction d) {
         return null;
     }
 
+    /**
+     * A cellához tartozó játékos visszaadása.
+     * Mivel ez egy üres cella, ezért null.
+     * Kizátólag tesztelésre van használva!
+     * @return null
+     */
     public Player getPlayer() { return null; }
 
+    /**
+     * Törli az összes aktív MouseListenert, majd egy újat hozzáad.
+     * Új játék betöltése után szükséges.
+     */
     public void reAddListeners() {
         MouseListener[] ml = getMouseListeners();
         for(MouseListener m : ml) {
@@ -105,10 +148,12 @@ public class Cell extends JPanel implements Serializable {
         addMouseListener(new CellClickListener());
     }
 
+    /**
+     * Olyan MouseListener osztály, ami értesíti a controllert, hogy erre a cellára kattintottak.
+     */
     public class CellClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println(pos.getY()  + " " + pos.getX() + " " + getWidth()+ " " +getHeight());
             controller.clickedOnCell(pos);
         }
     }

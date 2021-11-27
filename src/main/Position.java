@@ -2,6 +2,9 @@ package main;
 
 import java.io.Serializable;
 
+/**
+ * A tábla egy pozícióját reprezentáló osztály.
+ */
 public class Position implements Serializable {
     private int x;
     private int y;
@@ -23,11 +26,25 @@ public class Position implements Serializable {
         return x == p.x && y == p.y;
     }
 
+    /**
+     * Elmozdítja a pozíciót d irányba
+     * @param d mozgás iránya
+     */
     public void move(Direction d) {
         x += d.x;
         y += d.y;
     }
 
+    /**
+     * Melyik irányba kell lépni, ha src-ből dest-be akarunk lépni.
+     * Csak akokr ad vissza érvényes irányt, ha lépés megengedett a játékban,
+     * azaz csak egyet kell lépni a négy irány valamelyikébe.
+     * Ha többet vagy nullát kell lépni, akkor null-t ad vissza.
+     * Nem ellenőrzi, hogy a pozíciók a táblán belül vannak-e.
+     * @param src A lépés forrása
+     * @param dest A lépés célja
+     * @return Az irány, amibe lépni kell, hogy src-ből dest-be jussunk.
+     */
     public static Direction whichWayToStep(Position src, Position dest) {
         int dx = dest.x - src.x;
         int dy = dest.y - src.y;
@@ -47,14 +64,30 @@ public class Position implements Serializable {
         }
 
     }
+
+    /**
+     * Visszaad egy olyan pozíciót, aminek mindkét koordinátája -1,
+     * ami az implementációban a cserepad pozícióját jelenti.
+     * @return Position(-1, -1)
+     */
     public static Position bench() {
         return new Position(-1, -1);
     }
 
+    /**
+     * Ellenőrzi, hogy a pozíció a táblán kívűl van-e
+     * @param p az ellenőrizendő pozíció
+     * @return Igaz, ha a táblán kívül van p
+     */
     public static boolean isOutOfBounds(Position p) {
         return p.getX() < 0 || p.getY() < 0 || p.getX() > 4 || p.getY() > 4;
     }
 
+    /**
+     * Ellenőrzi, hogy a pozíció a tábla külső 16 mezőjében van-e
+     * @param p az ellenőrizendő pozíció
+     * @return Igaz, ha a tábla külső mezőiben van p
+     */
     public static boolean isInOuterCells(Position p) {
         if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
             return true;

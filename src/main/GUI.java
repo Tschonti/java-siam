@@ -10,6 +10,11 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.HashMap;
 
+/**
+ * A játlk megjelenésért felelős osztály.
+ * Ez jeleníti meg a táblát a cserepadokat,
+ * a jobb oldali menürendszert és a felső menüsávot.
+ */
 public class GUI extends JFrame {
     private final JPanel boardCont = new JPanel();
     private final JPanel elephantSupplyCont = new JPanel();
@@ -53,7 +58,11 @@ public class GUI extends JFrame {
         setVisible(true);
     }
 
-    public void initializeLeftSide(JPanel leftCont) {
+    /**
+     * A tábla és a cserepadok megjelenését állítja a kezdőállapotba.
+     * @param leftCont A bal oldalt tartalmazaó JPanel
+     */
+    private void initializeLeftSide(JPanel leftCont) {
         leftCont.setPreferredSize(new Dimension(630, 960));
 
         boardCont.setLayout(new GridLayout(5, 5, 5, 5));
@@ -70,7 +79,11 @@ public class GUI extends JFrame {
         leftCont.add(elephantSupplyCont, BorderLayout.SOUTH);
     }
 
-    public void initializeRightSide(JPanel rightCont) {
+    /**
+     * A jobboldali menürendszer megjelenését állítja a kezdőállapotba.
+     * @param rightCont A jobb oldalt tartalmazaó JPanel
+     */
+    private void initializeRightSide(JPanel rightCont) {
         rightCont.setLayout(new BoxLayout(rightCont, BoxLayout.Y_AXIS));
         rightCont.setPreferredSize(new Dimension(590, 960));
 
@@ -104,7 +117,10 @@ public class GUI extends JFrame {
         rightActions.setPreferredSize(new Dimension(590, 640));
     }
 
-    public void initializeMenu() {
+    /**
+     * A felső menüsáv megjelenését állítja a kezdőállapotba.
+     */
+    private void initializeMenu() {
         JMenuItem newGameMenu = new JMenuItem("New Game");
         newGameMenu.setActionCommand("newGame");
         newGameMenu.addActionListener(gcp);
@@ -136,6 +152,10 @@ public class GUI extends JFrame {
         this.board = board;
     }
 
+    /**
+     * A tábla celláit kiveszi boardCOnt-ból, majd újra berakja.
+     * Így frissíti a táblát, cellák cseréje így jelenik meg.
+     */
     public void drawBoard() {
         boardCont.removeAll();
         for(int y = 0; y < 5; y++) {
@@ -146,6 +166,11 @@ public class GUI extends JFrame {
         boardCont.updateUI();
     }
 
+    /**
+     * A cserebad celláit kiveszi az egyik SupplyCont-ból, majd újra berakja,
+     * így frissíti a cserepadot.
+     * @param p Melyik játékos cserepadját kell frisíteni
+     */
     public void drawSupply(Player p) {
         switch (p) {
             case RHINO:
@@ -165,6 +190,12 @@ public class GUI extends JFrame {
         }
     }
 
+    /**
+     * Az egyik cserepad háttérszínét az adott módba kapcsolja, vagy onnan ki.
+     * @param p Melyik játékos cserepadját kell frisíteni
+     * @param highlight igaz, ha bekapcsolás
+     * @param center igaz, ha "kiválasztott mező" módba kapcsolunk, hamis ha "leheséges lépés" módba
+     */
     public void toggleSupplyHighlight(Player p, boolean highlight, boolean center) {
         Color c = UIManager.getColor ( "Panel.background" );
         if (highlight && center) {
@@ -181,12 +212,26 @@ public class GUI extends JFrame {
         }
     }
 
+    /**
+     * A controller ezzel a metódussal értesíti a GUI-t, hogy változott a kör állapota.
+     * A stateToPanel HashMap segítségével az új állapothoz tartozó panel kerül megjelenítésre a rightActions CardLayout-ban.
+     * A potp-n frissíti a soron lévő játékost.
+     * @param rs Az új RoundState
+     * @param onTurn A soron lévő játékos.
+     */
     public void roundStateSwitch(RoundState rs, Player onTurn) {
         CardLayout cl = (CardLayout) rightActions.getLayout();
         cl.show(rightActions, stateToPanel.get(rs));
         potp.switchPlayer(onTurn);
     }
 
+    /**
+     * A controller ezzel a metódussal értesíti a GUI-t, hogy változott a játék állapota.
+     * Ha most indul, akkor megjeleníti a potp-t és engedélyezi a mentés gombokat.
+     * Ha most lett vége, akkor eltünteti a potp-t és letiltja a mentés gombokat, valamint kiírja a győztest.
+     * @param gs Az új GameState
+     * @param winner A győztes játékos, ha gs == GameOver, egyébként mindegy
+     */
     public void gameStateSwitch(GameState gs, Player winner) {
         switch (gs) {
             case STARTED:
@@ -199,14 +244,19 @@ public class GUI extends JFrame {
                 CardLayout cl = (CardLayout) rightActions.getLayout();
                 cl.show(rightActions, tp.getName());
                 switch (winner) {
-                    case ELEPHANT: tp.setLabelText("Elephant is the winner!"); break;
-                    case RHINO: tp.setLabelText("Rhino is the winner!");
+                    case ELEPHANT: tp.setLabelText(String.format("<html><span style='color: rgb(%d, %d, %d);'>Elephant</span> is the winner!</html>", Player.ELEPHANT.activeColor.getRed(), Player.ELEPHANT.activeColor.getGreen(), Player.ELEPHANT.activeColor.getBlue())); break;
+                    case RHINO: tp.setLabelText(String.format("<html><span style='color: rgb(%d, %d, %d);'>Rhino</span> is the winner!</html>", Player.RHINO.activeColor.getRed(), Player.RHINO.activeColor.getGreen(), Player.RHINO.activeColor.getBlue()));
                 }
                 gcp.setSaveEnabled(false);
                 saveGameMenu.setEnabled(false);
         }
     }
 
+    /**
+     * Megjelenít egy JFileChoosert a projetk forrásmappájánál.
+     * @param buttonText A FileChooser oké gomjának szövege
+     * @return null, ha a felhasználó nem választott fájlt, egyébként a választott fájl
+     */
     public File showFileChooser(String buttonText) {
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -217,6 +267,10 @@ public class GUI extends JFrame {
         return null;
     }
 
+    /**
+     * Felhívja a felhasználó figyelmét, hogy az adott akcióval elveszti a jelenlegi játék előrehaladását.
+     * @return Igaz, ha a játékos továbbra is szeretné elvégezni az akciót
+     */
     public boolean confirmNewGame() {
         JOptionPane opt = new JOptionPane("Are you sure you want to abandon this game? Any unsaven progress will be lost!",
                 JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
@@ -225,6 +279,10 @@ public class GUI extends JFrame {
         return !(opt.getValue() == null || opt.getValue().equals(JOptionPane.CANCEL_OPTION));
     }
 
+    /**
+     * Hibaüzenetet mutat a felhasználónak
+     * @param msg hibaüzenet
+     */
     public void errorMessage(String msg) {
         JOptionPane opt = new JOptionPane(msg,
                 JOptionPane.ERROR_MESSAGE, JOptionPane.DEFAULT_OPTION);
@@ -232,12 +290,19 @@ public class GUI extends JFrame {
         jd.setVisible(true);
     }
 
+    /**
+     * Siker üzenetet mutat a felhasználónak
+     * @param msg szöveg
+     */
     public void successMessage(String msg) {
         JOptionPane opt = new JOptionPane(msg, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
         JDialog jd = opt.createDialog("Success");
         jd.setVisible(true);
     }
 
+    /**
+     * MouseListener osztály, ami értesíti a controllert, ha az elefánt cserepadjára kattintott a felhasználó.
+     */
     class ElephantSupplyClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -245,6 +310,9 @@ public class GUI extends JFrame {
         }
     }
 
+    /**
+     * MouseListener osztály, ami értesíti a controllert, ha az orrszarvú cserepadjára kattintott a felhasználó.
+     */
     class RhinoSupplyClickListener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
