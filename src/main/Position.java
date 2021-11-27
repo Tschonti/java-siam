@@ -36,6 +36,24 @@ public class Position implements Serializable {
     }
 
     /**
+     * Ellenőrzi, hogy a pozíció a táblán kívűl van-e
+     * @return Igaz, ha a táblán kívül van
+     */
+    public boolean isOutOfBounds() {
+        return x < 0 || y < 0 || x > 4 || y > 4;
+    }
+
+    /**
+     * Ellenőrzi, hogy a pozíció a tábla külső 16 mezőjében van-e
+     * @return Igaz, ha a tábla külső mezőiben van
+     */
+    public boolean isInOuterCells() {
+        if ((y == 0 || y == 4) && x >= 0 && x <= 4) {
+            return true;
+        } else return (x == 0 || x == 4) && y >= 0 && y <= 4;
+    }
+
+    /**
      * Melyik irányba kell lépni, ha src-ből dest-be akarunk lépni.
      * Csak akokr ad vissza érvényes irányt, ha lépés megengedett a játékban,
      * azaz csak egyet kell lépni a négy irány valamelyikébe.
@@ -72,25 +90,5 @@ public class Position implements Serializable {
      */
     public static Position bench() {
         return new Position(-1, -1);
-    }
-
-    /**
-     * Ellenőrzi, hogy a pozíció a táblán kívűl van-e
-     * @param p az ellenőrizendő pozíció
-     * @return Igaz, ha a táblán kívül van p
-     */
-    public static boolean isOutOfBounds(Position p) {
-        return p.getX() < 0 || p.getY() < 0 || p.getX() > 4 || p.getY() > 4;
-    }
-
-    /**
-     * Ellenőrzi, hogy a pozíció a tábla külső 16 mezőjében van-e
-     * @param p az ellenőrizendő pozíció
-     * @return Igaz, ha a tábla külső mezőiben van p
-     */
-    public static boolean isInOuterCells(Position p) {
-        if ((p.getY() == 0 || p.getY() == 4) && p.getX() >= 0 && p.getX() <= 4) {
-            return true;
-        } else return (p.getX() == 0 || p.getX() == 4) && p.getY() >= 0 && p.getY() <= 4;
     }
 }

@@ -59,7 +59,7 @@ public class PositionTest {
      */
     @Test
     public void isOutOfBounds() {
-        assertEquals(Position.isOutOfBounds(source), outOfBounds);
+        assertEquals(source.isOutOfBounds(), outOfBounds);
     }
 
     /**
@@ -68,6 +68,6 @@ public class PositionTest {
      */
     @Test
     public void isInOuterCells() {
-        assertEquals(Position.isInOuterCells(source), outer);
+        assertEquals(source.isInOuterCells(), outer);
     }
 }

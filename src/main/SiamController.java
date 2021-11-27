@@ -171,7 +171,7 @@ public class SiamController implements Serializable {
     public void clickedOnCell(Position p) {
         if (game_s == GameState.STARTED && round_s == RoundState.PICK_DESTINATION) {
             if (source.equals(Position.bench())) {
-                if (!Position.isInOuterCells(p)) {
+                if (!p.isInOuterCells()) {
                     return;
                 }
                 board.toggleOuterHighlights(false);

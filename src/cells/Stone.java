@@ -51,7 +51,7 @@ public class Stone extends Cell {
      */
     public boolean push(Direction d) {
         Position next = new Position(pos.getX() + d.x, pos.getY() + d.y);
-        if (Position.isOutOfBounds(next)) {
+        if (next.isOutOfBounds()) {
             b.removeFromBoard(pos);
             return true;
         }

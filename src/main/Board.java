@@ -5,8 +5,6 @@ import cells.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import static main.Position.isInOuterCells;
-
 /**
  * A játék tábláját és két cserepadját reprezentáló osztály.
  * Felelősségei közé tartozik állatok cserepadról táblára mozgatása és vissza,
@@ -112,7 +110,7 @@ public class Board implements Serializable {
      * @return Hamis, ha dest nem a külső 16 mező egyike, egyébként igaz (sikerült a mozgatás)
      */
     public boolean moveFromBench(Position dest, Player bench, Direction newDir) {
-        if (!isInOuterCells(dest)) {
+        if (!dest.isInOuterCells()) {
             return false;
         }
         Animal toMove = bench == Player.ELEPHANT ? elephantSupply.remove(0) : rhinoSupply.remove(0);
@@ -198,12 +196,12 @@ public class Board implements Serializable {
             return -1;
         }
         Direction pushDir = board[src.getY()][src.getX()].getDir();
-        if (Position.isOutOfBounds(new Position(src.getX() + pushDir.x, src.getY() + pushDir.y))) {
+        if (new Position(src.getX() + pushDir.x, src.getY() + pushDir.y).isOutOfBounds()) {
             return -1;
         }
         Position moving = new Position(src.getX(), src.getY());
         int sum = 0;
-        while (!Position.isOutOfBounds(moving)) {
+        while (!moving.isOutOfBounds()) {
             Integer str = board[moving.getY()][moving.getX()].getStrengthForPush(pushDir);
             if (str == null) {
                 return sum;
