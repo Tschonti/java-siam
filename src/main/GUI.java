@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * A játlk megjelenésért felelős osztály.
+ * A játék megjelenésért felelős osztály.
  * Ez jeleníti meg a táblát a cserepadokat,
  * a jobb oldali menürendszert és a felső menüsávot.
  */
@@ -38,17 +38,9 @@ public class GUI extends JFrame {
         board = b;
         cont = c;
 
-        // left side
-        JPanel left = new JPanel(new BorderLayout(0, 8));
-        add(left, BorderLayout.WEST);
-        initializeLeftSide(left);
-
-        //right side
-        JPanel right = new JPanel();
-        add(right, BorderLayout.EAST);
+        add(initializeLeftSide(), BorderLayout.WEST);
         gcp = new GameControlPanel(cont);
-        initializeRightSide(right);
-
+        add(initializeRightSide(), BorderLayout.EAST);
         initializeMenu();
 
         potp.setVisible(false);
@@ -60,9 +52,10 @@ public class GUI extends JFrame {
 
     /**
      * A tábla és a cserepadok megjelenését állítja a kezdőállapotba.
-     * @param leftCont A bal oldalt tartalmazaó JPanel
+     * @return A bal oldal elemeit tartalmazó JPanel
      */
-    private void initializeLeftSide(JPanel leftCont) {
+    private JPanel initializeLeftSide() {
+        JPanel leftCont = new JPanel(new BorderLayout(0, 8));
         leftCont.setPreferredSize(new Dimension(630, 960));
 
         boardCont.setLayout(new GridLayout(5, 5, 5, 5));
@@ -77,13 +70,15 @@ public class GUI extends JFrame {
         leftCont.add(rhinoSupplyCont, BorderLayout.NORTH);
         leftCont.add(boardCont, BorderLayout.CENTER);
         leftCont.add(elephantSupplyCont, BorderLayout.SOUTH);
+        return leftCont;
     }
 
     /**
      * A jobboldali menürendszer megjelenését állítja a kezdőállapotba.
-     * @param rightCont A jobb oldalt tartalmazaó JPanel
+     * @return A jobb oldal elemeit tartalmazó JPanel
      */
-    private void initializeRightSide(JPanel rightCont) {
+    private JPanel initializeRightSide() {
+        JPanel rightCont = new JPanel();
         rightCont.setLayout(new BoxLayout(rightCont, BoxLayout.Y_AXIS));
         rightCont.setPreferredSize(new Dimension(590, 960));
 
@@ -115,6 +110,7 @@ public class GUI extends JFrame {
         stateToPanel.put(RoundState.PICK_DIRECTION, pdirp.getName());
 
         rightActions.setPreferredSize(new Dimension(590, 640));
+        return rightCont;
     }
 
     /**
