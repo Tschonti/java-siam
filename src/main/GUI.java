@@ -238,6 +238,7 @@ public class GUI extends JFrame {
             case GAME_OVER:
                 potp.setVisible(false);
                 CardLayout cl = (CardLayout) rightActions.getLayout();
+                tp.hideTextArea();
                 cl.show(rightActions, tp.getName());
                 switch (winner) {
                     case ELEPHANT: tp.setLabelText(String.format("<html><span style='color: rgb(%d, %d, %d);'>Elephant</span> is the winner!</html>", Player.ELEPHANT.activeColor.getRed(), Player.ELEPHANT.activeColor.getGreen(), Player.ELEPHANT.activeColor.getBlue())); break;

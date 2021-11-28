@@ -47,12 +47,7 @@ public abstract class Animal extends Cell {
             case LEFT: rotation = Math.PI/2;
         }
         if (image != null) {
-            g2.rotate(rotation, (double) image.getWidth() / 2, (double) image.getHeight() / 2);
-            switch (dir) {
-                case UP: g2.translate(getWidth()*Math.PI - 4, getHeight()*Math.PI); break;
-                case RIGHT: g2.translate(getWidth()*Math.PI - 4, 0); break;
-                case LEFT: g2.translate(0, getHeight()*Math.PI);
-            }
+            g2.rotate(rotation, (double) getWidth() / 2, (double) getHeight() / 2);
             g2.drawImage(image, 5, 5, getWidth() - 5, getHeight() - 5, 0, 0, image.getWidth(), image.getHeight(), null);
         }
     }

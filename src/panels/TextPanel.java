@@ -25,4 +25,8 @@ public class TextPanel extends PanelWithText {
     public void setLabelText(String text) {
         title.setText(text);
     }
+
+    public void hideTextArea() {
+        ta.setVisible(false);
+    }
 }
