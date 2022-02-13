@@ -25,7 +25,7 @@ public class Rhino extends Animal {
 
     public void setImage() {
         try {
-            image = ImageIO.read(Player.RHINO.image);
+            image = ImageIO.read(getClass().getResource(Player.RHINO.imagePath));
         } catch (IOException e) {
             e.printStackTrace();
         }

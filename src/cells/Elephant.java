@@ -26,7 +26,7 @@ public class Elephant extends Animal {
 
     public void setImage() {
         try {
-            image = ImageIO.read(Player.ELEPHANT.image);
+            image = ImageIO.read(getClass().getResource(Player.ELEPHANT.imagePath));
         } catch (IOException e) {
             e.printStackTrace();
         }

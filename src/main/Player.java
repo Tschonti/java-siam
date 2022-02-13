@@ -1,21 +1,20 @@
 package main;
 
 import java.awt.*;
-import java.io.File;
 
 /**
  * A két játékos reprezentáló enumeráció
  */
 public enum Player {
-    ELEPHANT (new Color(49, 0, 114), new File("images/elephant.png")),
-    RHINO (new Color(108, 4, 30), new File("images/rhino.png"));
+    ELEPHANT (new Color(49, 0, 114), "/images/elephant.png"),
+    RHINO (new Color(108, 4, 30), "/images/rhino.png");
 
     public final Color activeColor;     // A játékoshoz tartozó szín.
-    public final File image;            // Az a képfájl, ami a játékos cellájára kerül.
+    public final String imagePath;            // Az a képfájl, ami a játékos cellájára kerül.
 
-    Player(Color c, File i) {
+    Player(Color c, String i) {
         activeColor = c;
-        image = i;
+        imagePath = i;
     }
 
     /**

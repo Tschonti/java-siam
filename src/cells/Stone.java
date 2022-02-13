@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -62,7 +61,7 @@ public class Stone extends Cell {
 
     public void setImage() {
         try {
-            image = ImageIO.read(new File("images/stone.png"));
+            image = ImageIO.read(getClass().getResource("/images/stone.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

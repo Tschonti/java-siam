@@ -23,16 +23,16 @@ public class PickDirectionPanel extends PanelWithText implements ActionListener 
         ta.setText("The animals can only push in the direction they're facing but they can move in any direction, " +
                 "so you should decide their direction based on your intentions to push in the upcoming rounds.");
 
-        Icon upIcon = new ImageIcon("images/up.png");
+        Icon upIcon = new ImageIcon(getClass().getResource("/images/up.png"));
         JButton up = new JButton(upIcon);
 
-        Icon rightIcon = new ImageIcon("images/right.png");
+        Icon rightIcon = new ImageIcon(getClass().getResource("/images/right.png"));
         JButton right = new JButton(rightIcon);
 
-        Icon downIcon = new ImageIcon("images/down.png");
+        Icon downIcon = new ImageIcon(getClass().getResource("/images/down.png"));
         JButton down = new JButton(downIcon);
 
-        Icon leftIcon = new ImageIcon("images/left.png");
+        Icon leftIcon = new ImageIcon(getClass().getResource("/images/left.png"));
         JButton left = new JButton(leftIcon);
 
         JButton back = new JButton("Cancel destination choice");
